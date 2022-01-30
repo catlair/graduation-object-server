@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { WinstonModule } from 'nest-winston';
 import winstonOptions from './common/config/logging';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
+import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -31,7 +32,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swagger);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -41,8 +42,10 @@ async function bootstrap() {
     }),
   );
 
+  app.useGlobalInterceptors(new TransformInterceptor());
+
   await app.listen(PORT);
-  Logger.log(`点击链接访问文档 http://localhost:${PORT}/api-docs`, 'Bootstrap');
+  Logger.log(`点击链接访问文档 http://localhost:${PORT}/swagger`, 'Bootstrap');
   Logger.log(`点击链接访问接口 http://localhost:${PORT}/graphql`, 'Bootstrap');
 }
 bootstrap();

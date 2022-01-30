@@ -10,6 +10,7 @@ import { PostModule } from './post/post.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaModule } from 'nestjs-prisma';
 import { loggingMiddleware } from './common/middleware/prisma-logger.middleware';
+import { UploadModule } from './upload/upload.module';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -65,6 +66,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
     AuthModule,
     UserModule,
     PostModule,
+    UploadModule,
   ],
 })
 export class AppModule implements NestModule {
