@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "christian-kohler.path-intellisense",
+    "mikestead.dotenv",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "graphql.vscode-graphql",
+    "prisma.prisma"
+  ]
+}
