@@ -3,3 +3,4 @@ node_modules
 dist
 **/*.prisma
 **/*.log
+src/schema.graphql

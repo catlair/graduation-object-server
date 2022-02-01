@@ -20,7 +20,8 @@
     "db:migrate": "dotenv-flow -- npx prisma migrate dev --preview-feature",
     "db:deploy": "dotenv-flow -- npx prisma migrate deploy --preview-feature",
     "db:g": "dotenv-flow -- npx prisma generate",
-    "db:seed": "dotenv-flow -- ts-node prisma/seed.ts"
+    "db:seed": "dotenv-flow -- ts-node prisma/seed.ts",
+    "db:studio": "dotenv-flow -- npx prisma studio"
   },
   "dependencies": {
     "@devoxa/prisma-relay-cursor-connection": "^2.1.0",
@@ -64,6 +65,7 @@
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@graphql-eslint/eslint-plugin": "^3.7.0",
     "@nestjs/cli": "^8.2.0",
     "@nestjs/schematics": "^8.0.5",
     "@types/bcryptjs": "^2.4.2",

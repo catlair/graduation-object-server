@@ -14,11 +14,23 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'src/schema.graphql'],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
   },
+  overrides: [
+    {
+      files: ['*.graphql', '*.gql'],
+      parserOptions: {
+        schema: './src/schema.graphql',
+      },
+      extends: 'plugin:@graphql-eslint/schema-recommended',
+      rules: {
+        '@graphql-eslint/known-type-names': 'error',
+      },
+    },
+  ],
 };
