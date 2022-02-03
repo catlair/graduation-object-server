@@ -99,6 +99,7 @@ type Query {
   me: User!
   post(postId: String!): Post!
   publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
+  test: Post!
   userPosts(userId: String!): [Post!]!
 }
 
@@ -128,8 +129,9 @@ type Token {
 }
 
 input UpdateUserInput {
-  firstname: String
-  lastname: String
+  college: String
+  email: String
+  name: String
 }
 
 type User {

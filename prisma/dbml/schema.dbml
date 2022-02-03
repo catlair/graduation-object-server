@@ -4,30 +4,106 @@
 
 Table User {
   id String [pk]
+  email String [unique, not null]
+  name String [not null]
+  password String [not null]
+  college String [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  email String [unique, not null]
-  password String [not null]
-  firstname String
-  lastname String
-  posts Post [not null]
-  role Role [not null]
+  UserRole UserRole [not null]
+  TeacherCourse TeacherCourse [not null]
 }
 
-Table Post {
+Table UserRole {
+  roleId String [not null]
+  userId String [not null]
+  user User [not null]
+
+  indexes {
+    (roleId, userId) [pk]
+  }
+}
+
+Table Role {
   id String [pk]
+  name RoleEenum [not null]
+}
+
+Table Course {
+  id String [pk]
+  name String [unique, not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  published Boolean [not null]
+}
+
+Table TeacherCourse {
+  teacherId String [not null]
+  courseId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  User User
+
+  indexes {
+    (teacherId, courseId) [pk]
+  }
+}
+
+Table Paper {
+  id String [pk]
+  courseId String [not null]
+  name String [unique]
+  status PaperEenum [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lifes PaperLife [not null]
+}
+
+Table PaperLife {
+  id String [pk]
+  paperId String [not null]
+  userId String [not null]
+  status PaperEenum [not null]
+  content String
+  createdAt DateTime [default: `now()`, not null]
+  Paper Paper [not null]
+}
+
+Table ManagerNotice {
+  id String [pk]
   title String [not null]
   content String
-  author User
-  authorId String
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  UserNotice UserNotice [not null]
 }
 
-Enum Role {
+Table UserNotice {
+  id String [pk]
+  userId String [not null]
+  managerNoticeId String [not null]
+  read Boolean [not null, default: false]
+  readAt DateTime
+  ManagerNotice ManagerNotice [not null]
+}
+
+Enum RoleEenum {
   ADMIN
-  USER
+  DIRECTOR
+  VICE_DIRECTOR
+  TEACHER
+  SECRETARY
 }
 
-Ref: Post.authorId > User.id
+Enum PaperEenum {
+  WAITING
+  PASS
+  REJECT
+}
+
+Ref: UserRole.userId > User.id
+
+Ref: TeacherCourse.teacherId > User.id
+
+Ref: PaperLife.paperId > Paper.id
+
+Ref: UserNotice.managerNoticeId > ManagerNotice.id

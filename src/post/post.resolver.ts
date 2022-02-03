@@ -33,6 +33,15 @@ export class PostResolver {
     return pubSub.asyncIterator('postCreated');
   }
 
+  @Query(() => Post)
+  test() {
+    return {
+      title: 'string',
+      content: 'string',
+      published: 'boolean',
+    };
+  }
+
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Post)
   async createPost(
