@@ -1,4 +1,3 @@
-import { GqlAuthGuard } from '@/common/guards/gql-auth.guard';
 import { AuthResolver } from './auth.resolver';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
@@ -26,13 +25,6 @@ import { Configuration } from '@/common/config/configuration';
       inject: [ConfigService],
     }),
   ],
-  providers: [
-    AuthService,
-    AuthResolver,
-    JwtStrategy,
-    GqlAuthGuard,
-    HashingService,
-  ],
-  exports: [GqlAuthGuard],
+  providers: [AuthService, AuthResolver, JwtStrategy, HashingService],
 })
 export class AuthModule {}

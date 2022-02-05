@@ -38,7 +38,7 @@ async function bootstrap() {
     new ValidationPipe({
       // skipMissingProperties: true, // 忽略缺失的属性，如果需要校验，使用 @IsDefined()
       transform: true, // 开启转换
-      whitelist: true, // 开启白名单，忽略掉不应该存在的属性 （白名单必须要使用校验，否则无法通过）
+      whitelist: true, // 开启白名单，忽略掉不应该存在的属性 （白名单必须要使用校验，否则无法通过, 重要）
     }),
   );
 

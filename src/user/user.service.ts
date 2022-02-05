@@ -18,7 +18,7 @@ export class UserService {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
-  updateUser(userId: string, newUserData: UpdateUserInput) {
+  updateUser(userId: number, newUserData: UpdateUserInput) {
     return this.prisma.user.update({
       data: newUserData,
       where: {
@@ -27,20 +27,8 @@ export class UserService {
     });
   }
 
-  /** 发送邮箱验证码 */
-  async sendEmailCode(userId: string, email: string) {
-    // 创建一个7位的随机验证码
-    const code = Math.random().toString().slice(2, 9);
-    // 发送邮件
-    return code;
-  }
-
-  async changeEmail(userId: string, newEmail: string, code: string) {
-    // 验证邮箱验证码
-  }
-
   /** 修改邮箱 */
-  async updateEmail(userId: string, newEmail: string) {
+  async updateEmail(userId: number, newEmail: string) {
     // 邮箱是否已经被注册
     const userExist = await this.prisma.user.findUnique({
       where: { email: newEmail },
@@ -58,7 +46,7 @@ export class UserService {
 
   /** 修改密码（需要提供旧密码） */
   async changePassword(
-    userId: string,
+    userId: number,
     userPassword: string,
     changePassword: ChangePasswordInput,
   ) {
@@ -75,7 +63,7 @@ export class UserService {
   }
 
   /** 更新密码 */
-  async updatePassword(userId: string, newPassword: string) {
+  async updatePassword(userId: number, newPassword: string) {
     const hashedPassword = await this.hashingService.get(newPassword);
 
     return await this.prisma.user.update({

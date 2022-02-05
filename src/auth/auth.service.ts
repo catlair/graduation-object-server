@@ -29,9 +29,11 @@ export class AuthService {
     try {
       const user = await this.prisma.user.create({
         data: {
-          ...payload,
+          email: payload.email,
           password: hashedPassword,
-          role: 'USER',
+          college: payload.college,
+          id: payload.id,
+          name: payload.name,
         },
       });
 
@@ -71,7 +73,7 @@ export class AuthService {
     });
   }
 
-  validateUser(userId: string): Promise<User> {
+  validateUser(userId: number): Promise<User> {
     return this.prisma.user.findUnique({ where: { id: userId } });
   }
 
@@ -80,18 +82,18 @@ export class AuthService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  generateTokens(payload: { userId: string }): Token {
+  generateTokens(payload: { userId: number }): Token {
     return {
       accessToken: this.generateAccessToken(payload),
       refreshToken: this.generateRefreshToken(payload),
     };
   }
 
-  private generateAccessToken(payload: { userId: string }): string {
+  private generateAccessToken(payload: { userId: number }): string {
     return this.jwtService.sign(payload);
   }
 
-  private generateRefreshToken(payload: { userId: string }): string {
+  private generateRefreshToken(payload: { userId: number }): string {
     const securityConfig =
       this.configService.get<Configuration['security']>('security');
     return this.jwtService.sign(payload, {

@@ -1,6 +1,5 @@
+import { TimestampedModel } from '@/common/models/base.model';
 import { ObjectType, registerEnumType, HideField } from '@nestjs/graphql';
-import { Post } from '@/post/models/post.model';
-import { BaseModel } from '@/common/models/base.model';
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -13,12 +12,14 @@ registerEnumType(Role, {
 });
 
 @ObjectType()
-export class User extends BaseModel {
+export class User extends TimestampedModel {
+  id: number;
   email: string;
-  firstname?: string;
-  lastname?: string;
+  name: string;
   role: Role;
-  posts: Post[];
   @HideField()
   password: string;
+  college?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

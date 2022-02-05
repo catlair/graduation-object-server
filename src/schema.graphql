@@ -11,20 +11,29 @@ type Auth {
   user: User!
 }
 
+type Captcha {
+  """captcha key"""
+  key: String!
+
+  """svg captcha"""
+  svg: String!
+}
+
 input ChangePasswordInput {
   newPassword: String!
   oldPassword: String!
-}
-
-input CreatePostInput {
-  content: String!
-  title: String!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Email {
+  createdAt: Float!
+  email: String!
+  name: String!
+}
 
 input LoginInput {
   email: String!
@@ -33,91 +42,25 @@ input LoginInput {
 
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
-  createPost(data: CreatePostInput!): Post!
   login(data: LoginInput!): Auth!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
   updateUser(data: UpdateUserInput!): User!
 }
 
-"""
-Possible directions in which to order a list of items when provided an `orderBy` argument.
-"""
-enum OrderDirection {
-  asc
-  desc
-}
-
-type PageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
-}
-
-type Post {
-  author: User!
-  content: String!
-
-  """Identifies the date and time when the object was created."""
-  createdAt: DateTime!
-  id: ID!
-  published: Boolean!
-  title: String!
-
-  """Identifies the date and time when the object was last updated."""
-  updatedAt: DateTime!
-}
-
-type PostConnection {
-  edges: [PostEdge!]
-  pageInfo: PageInfo!
-  totalCount: Int!
-}
-
-type PostEdge {
-  cursor: String!
-  node: Post!
-}
-
-input PostOrder {
-  direction: OrderDirection!
-  field: PostOrderField!
-}
-
-"""Properties by which post connections can be ordered."""
-enum PostOrderField {
-  content
-  createdAt
-  id
-  published
-  title
-  updatedAt
-}
-
 type Query {
+  captcha: Captcha!
+  emailCode(email: String!, name: String): Email!
   me: User!
-  post(postId: String!): Post!
-  publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
-  test: Post!
-  userPosts(userId: String!): [Post!]!
-}
-
-"""User role"""
-enum Role {
-  ADMIN
-  USER
+  validateCaptcha(code: String!, key: String!): ValidateCaptcha!
 }
 
 input SignupInput {
+  college: String
   email: String!
-  firstname: String
-  lastname: String
+  id: Int!
+  name: String!
   password: String!
-}
-
-type Subscription {
-  postCreated: Post!
 }
 
 type Token {
@@ -137,13 +80,12 @@ input UpdateUserInput {
 type User {
   """Identifies the date and time when the object was created."""
   createdAt: DateTime!
-  email: String!
-  firstname: String
-  id: ID!
-  lastname: String
-  posts: [Post!]!
-  role: Role!
 
   """Identifies the date and time when the object was last updated."""
   updatedAt: DateTime!
+}
+
+type ValidateCaptcha {
+  code: String
+  valid: Boolean!
 }

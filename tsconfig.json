@@ -9,10 +9,10 @@
     "target": "es2020",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"],
-      "~/*": ["./src/modules/*"]
+      "@/*": ["./*"],
+      "~/*": ["./modules/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

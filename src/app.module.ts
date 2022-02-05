@@ -6,11 +6,14 @@ import { configuration, Configuration } from './common/config/configuration';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { PostModule } from './post/post.module';
+import { UploadModule } from './upload/upload.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PrismaModule } from 'nestjs-prisma';
 import { loggingMiddleware } from './common/middleware/prisma-logger.middleware';
-import { UploadModule } from './upload/upload.module';
+import { EmailModule } from './email/email.module';
+import { CaptchaModule } from './captcha/captcha.module';
+import { APP_GUARD } from '@nestjs/core';
+import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -47,7 +50,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
             graphqlConfig.schemaDestination || './src/schema.graphql',
           debug: graphqlConfig.debug,
           playground: graphqlConfig.playgroundEnabled,
-          context: ({ req }) => ({ req }),
+          context: ({ req, res }) => ({ req, res }),
         };
       },
       inject: [ConfigService],
@@ -63,10 +66,17 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
       }),
     }),
 
+    EmailModule,
+    CaptchaModule,
     AuthModule,
     UserModule,
-    PostModule,
     UploadModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: GqlThrottlerGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {

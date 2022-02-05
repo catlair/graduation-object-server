@@ -1,5 +1,6 @@
 import { Auth } from './models/auth.model';
 import { Token } from '@/common/models/token.model';
+import { User } from '../user/models/user.model';
 import { LoginInput } from './dto/login.input';
 import {
   Resolver,
@@ -44,7 +45,7 @@ export class AuthResolver {
     return this.auth.refreshToken(token);
   }
 
-  @ResolveField('user')
+  @ResolveField('user', () => User)
   async user(@Parent() auth: Auth) {
     return await this.auth.getUserFromToken(auth.accessToken);
   }
