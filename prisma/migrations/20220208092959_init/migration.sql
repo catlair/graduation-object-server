@@ -1,30 +1,15 @@
 -- CreateTable
 CREATE TABLE `users` (
-    `id` VARCHAR(191) NOT NULL,
+    `id` INTEGER NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
-    `password` VARCHAR(40) NOT NULL,
-    `college` VARCHAR(20) NOT NULL,
+    `password` VARCHAR(80) NOT NULL,
+    `college` VARCHAR(20) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
+    `roles` JSON NOT NULL,
 
     UNIQUE INDEX `users_email_key`(`email`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `user_role` (
-    `role_id` VARCHAR(191) NOT NULL,
-    `user_id` VARCHAR(191) NOT NULL,
-
-    PRIMARY KEY (`role_id`, `user_id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `roles` (
-    `id` VARCHAR(191) NOT NULL,
-    `name` ENUM('ADMIN', 'DIRECTOR', 'VICE_DIRECTOR', 'TEACHER', 'SECRETARY') NOT NULL,
-
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -41,7 +26,7 @@ CREATE TABLE `courses` (
 
 -- CreateTable
 CREATE TABLE `teacher_course` (
-    `teacher_id` VARCHAR(191) NOT NULL,
+    `teacher_id` INTEGER NOT NULL,
     `course_id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -96,8 +81,18 @@ CREATE TABLE `user_notices` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- AddForeignKey
-ALTER TABLE `user_role` ADD CONSTRAINT `user_role_userId_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateTable
+CREATE TABLE `refresh_tokens` (
+    `token` VARCHAR(32) NOT NULL,
+    `user_id` INTEGER NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `os` JSON NOT NULL,
+    `device` JSON NOT NULL,
+    `browser` JSON NOT NULL,
+
+    UNIQUE INDEX `refresh_tokens_token_key`(`token`),
+    PRIMARY KEY (`token`, `user_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
 ALTER TABLE `teacher_course` ADD CONSTRAINT `teacher_course_teacher_id_fkey` FOREIGN KEY (`teacher_id`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -3,30 +3,15 @@
 //// ------------------------------------------------------
 
 Table User {
-  id String [pk]
+  id Int [pk]
   email String [unique, not null]
   name String [not null]
   password String [not null]
-  college String [not null]
+  college String
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  UserRole UserRole [not null]
-  TeacherCourse TeacherCourse [not null]
-}
-
-Table UserRole {
-  roleId String [not null]
-  userId String [not null]
-  user User [not null]
-
-  indexes {
-    (roleId, userId) [pk]
-  }
-}
-
-Table Role {
-  id String [pk]
-  name RoleEenum [not null]
+  roles Json [not null, default: '["TEACHER"]']
+  teacherCourse TeacherCourse [not null]
 }
 
 Table Course {
@@ -37,11 +22,11 @@ Table Course {
 }
 
 Table TeacherCourse {
-  teacherId String [not null]
+  teacherId Int [not null]
   courseId String [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  User User
+  teacher User
 
   indexes {
     (teacherId, courseId) [pk]
@@ -65,7 +50,7 @@ Table PaperLife {
   status PaperEenum [not null]
   content String
   createdAt DateTime [default: `now()`, not null]
-  Paper Paper [not null]
+  papper Paper [not null]
 }
 
 Table ManagerNotice {
@@ -74,7 +59,7 @@ Table ManagerNotice {
   content String
   userId String [not null]
   createdAt DateTime [default: `now()`, not null]
-  UserNotice UserNotice [not null]
+  userNotice UserNotice [not null]
 }
 
 Table UserNotice {
@@ -83,15 +68,7 @@ Table UserNotice {
   managerNoticeId String [not null]
   read Boolean [not null, default: false]
   readAt DateTime
-  ManagerNotice ManagerNotice [not null]
-}
-
-Enum RoleEenum {
-  ADMIN
-  DIRECTOR
-  VICE_DIRECTOR
-  TEACHER
-  SECRETARY
+  managerNotice ManagerNotice [not null]
 }
 
 Enum PaperEenum {
@@ -99,8 +76,6 @@ Enum PaperEenum {
   PASS
   REJECT
 }
-
-Ref: UserRole.userId > User.id
 
 Ref: TeacherCourse.teacherId > User.id
 

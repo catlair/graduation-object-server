@@ -4,8 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
-  // previewFeatures = []
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson"]
 }
 
 // generator dbml {
@@ -126,6 +126,9 @@ model RefreshToken {
   token     String   @unique @db.VarChar(32)
   userId    Int      @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
+  os        Json     @default("{}")
+  device    Json     @default("{}")
+  browser   Json     @default("{}")
 
   @@id([token, userId])
   @@map("refresh_tokens")

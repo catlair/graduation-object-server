@@ -28,6 +28,7 @@ specifiers:
   '@types/node': ^17.0.12
   '@types/passport-jwt': ^3.0.6
   '@types/passport-local': ^1.0.34
+  '@types/ua-parser-js': ^0.7.36
   '@typescript-eslint/eslint-plugin': ^5.10.1
   '@typescript-eslint/parser': ^5.10.1
   apollo-server-express: ^3.6.2
@@ -71,6 +72,7 @@ specifiers:
   ts-node: ^10.4.0
   tsconfig-paths: ^3.12.0
   typescript: ^4.5.5
+  ua-parser-js: ^1.0.2
   uuid: ^8.3.2
   webpack: ^5.67.0
   winston: ^3.4.0
@@ -89,6 +91,7 @@ dependencies:
   '@nestjs/swagger': 5.2.0_4528991a3f165f06456f8ba2d0ab7a53
   '@nestjs/throttler': 2.0.0_d86dd164971a98d71cc003a4f36ff106
   '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.1_prisma@3.9.1
+  '@types/ua-parser-js': registry.npmmirror.com/@types/ua-parser-js/0.7.36
   apollo-server-express: 3.6.2_express@4.17.2+graphql@15.8.0
   bcrypt: registry.npmmirror.com/bcrypt/5.0.1
   cache-manager: 3.6.0
@@ -114,6 +117,7 @@ dependencies:
   rxjs: 7.5.2
   svg-captcha: registry.npmmirror.com/svg-captcha/1.4.0
   swagger-ui-express: 4.3.0_express@4.17.2
+  ua-parser-js: registry.npmmirror.com/ua-parser-js/1.0.2
   uuid: registry.npmmirror.com/uuid/8.3.2
   winston: 3.4.0
 
@@ -7020,6 +7024,12 @@ packages:
     dev: false
     optional: true
 
+  registry.npmmirror.com/@types/ua-parser-js/0.7.36:
+    resolution: {integrity: sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz}
+    name: '@types/ua-parser-js'
+    version: 0.7.36
+    dev: false
+
   registry.npmmirror.com/@types/websocket/1.0.5:
     resolution: {integrity: sha512-NbsqiNX9CnEfC1Z0Vf4mE1SgAJ07JnRYcNex7AJ9zAVzmiGHmjKFEk7O4TJIsgv2B1sLEb6owKFZrACwdYngsQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/websocket/-/websocket-1.0.5.tgz}
     name: '@types/websocket'
@@ -8716,6 +8726,12 @@ packages:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tslib/-/tslib-2.3.1.tgz}
     name: tslib
     version: 2.3.1
+
+  registry.npmmirror.com/ua-parser-js/1.0.2:
+    resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ua-parser-js/-/ua-parser-js-1.0.2.tgz}
+    name: ua-parser-js
+    version: 1.0.2
+    dev: false
 
   registry.npmmirror.com/uglify-js/3.15.0:
     resolution: {integrity: sha512-x+xdeDWq7FiORDvyIJ0q/waWd4PhjBNOm5dQUOq2AKC0IEjxOS66Ha9tctiVDGcRQuh69K7fgU5oRuTK4cysSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uglify-js/-/uglify-js-3.15.0.tgz}
