@@ -1,9 +1,14 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserEntity } from '@/common/decorators/user.decorator';
 import { User } from './models/user.model';
+import { ChangeEmail } from './models/email.model';
 import { ChangePasswordInput } from './dto/change-password.input';
 import { UserService } from './user.service';
-import { UpdateUserInput } from './dto/update-user.input';
+import {
+  UpdateUserInput,
+  ChangeEmailInput,
+  UpdateEmailInput,
+} from './dto/update-user.input';
 import { Auth } from '@/common/decorators/auth.decorator';
 
 @Resolver(() => User)
@@ -23,6 +28,20 @@ export class UserResolver {
     @Args('data') newUserData: UpdateUserInput,
   ) {
     return this.userService.updateUser(user.id, newUserData);
+  }
+
+  @Auth()
+  @Mutation(() => ChangeEmail)
+  async changeEmail(
+    @UserEntity() user: User,
+    @Args('data') payload: ChangeEmailInput,
+  ) {
+    return this.userService.changeEmail(user.id, payload);
+  }
+
+  @Mutation(() => ChangeEmail)
+  async updateEmail(@Args('data') { key, userId }: UpdateEmailInput) {
+    return this.userService.updateEmail(key, userId);
   }
 
   @Auth()

@@ -1,6 +1,6 @@
+import { Role } from '@/user/models/user.model';
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { Role } from '../enums/role.enums';
 import { JwtAuthGuard } from '../guards/auth.guard';
 import { GqlAuthGuard } from '../guards/gql-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';

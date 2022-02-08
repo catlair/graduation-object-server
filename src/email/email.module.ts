@@ -5,7 +5,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { Configuration } from '@/common/config/configuration';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import * as path from 'path';
+import * as path from 'node:path';
 import { CacheConfigService } from '@/common/service/cache.service';
 
 @Module({
@@ -28,7 +28,7 @@ import { CacheConfigService } from '@/common/service/cache.service';
           })}>`,
         },
         template: {
-          dir: path.resolve(__dirname, './template'),
+          dir: path.resolve(process.cwd(), './dist/template'),
           adapter: new EjsAdapter(),
           options: {},
         },
@@ -39,5 +39,6 @@ import { CacheConfigService } from '@/common/service/cache.service';
     }),
   ],
   providers: [EmailResolver, EmailService],
+  exports: [EmailService],
 })
 export class EmailModule {}

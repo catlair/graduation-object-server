@@ -19,7 +19,19 @@ type Captcha {
   svg: String!
 }
 
+type ChangeEmail {
+  email: String!
+  userId: String!
+}
+
+input ChangeEmailInput {
+  code: String!
+  email: String!
+}
+
 input ChangePasswordInput {
+  code: String!
+  email: String!
   newPassword: String!
   oldPassword: String!
 }
@@ -30,21 +42,29 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Email {
-  createdAt: Float!
+  createdAt: DateTime!
   email: String!
   name: String!
 }
 
 input LoginInput {
-  email: String!
+  email: String
+  id: Int
   password: String!
 }
 
+type Logout {
+  message: String
+}
+
 type Mutation {
+  changeEmail(data: ChangeEmailInput!): ChangeEmail!
   changePassword(data: ChangePasswordInput!): User!
   login(data: LoginInput!): Auth!
+  logout(token: String!): Logout!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
+  updateEmail(data: UpdateEmailInput!): ChangeEmail!
   updateUser(data: UpdateUserInput!): User!
 }
 
@@ -55,12 +75,22 @@ type Query {
   validateCaptcha(code: String!, key: String!): ValidateCaptcha!
 }
 
+"""User role"""
+enum Role {
+  ADMIN
+  DIRECTOR
+  SECRETARY
+  TEACHER
+  VICE_DIRECTOR
+}
+
 input SignupInput {
   college: String
   email: String!
   id: Int!
   name: String!
   password: String!
+  roles: [Role!]
 }
 
 type Token {
@@ -71,15 +101,25 @@ type Token {
   refreshToken: String!
 }
 
+input UpdateEmailInput {
+  key: String!
+  userId: Int!
+}
+
 input UpdateUserInput {
   college: String
-  email: String
   name: String
 }
 
 type User {
+  college: String
+
   """Identifies the date and time when the object was created."""
   createdAt: DateTime!
+  email: String!
+  id: Int!
+  name: String!
+  roles: [Role!]
 
   """Identifies the date and time when the object was last updated."""
   updatedAt: DateTime!

@@ -34,15 +34,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swagger);
   SwaggerModule.setup('swagger', app, document);
 
+  app.useGlobalInterceptors(new TransformInterceptor());
+
   app.useGlobalPipes(
     new ValidationPipe({
       // skipMissingProperties: true, // 忽略缺失的属性，如果需要校验，使用 @IsDefined()
       transform: true, // 开启转换
-      whitelist: true, // 开启白名单，忽略掉不应该存在的属性 （白名单必须要使用校验，否则无法通过, 重要）
+      // whitelist: true, // 开启白名单，忽略掉不应该存在的属性 （白名单必须要使用校验，否则被忽略掉, 重要）
     }),
   );
-
-  app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(PORT);
   Logger.log(`点击链接访问文档 http://localhost:${PORT}/swagger`, 'Bootstrap');

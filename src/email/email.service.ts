@@ -1,8 +1,12 @@
 import dayjs from '@/common/utils/dayjs';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import * as path from 'node:path';
 
 @Injectable()
 export class EmailService {
@@ -17,12 +21,14 @@ export class EmailService {
    */
   async sendEmailCode(email: string, name?: string) {
     const code = Math.random().toString().slice(-6),
-      createdAt = Date.now(),
-      date = dayjs.unix(createdAt / 1000).format('YYYY-MM-DD HH:mm:ss');
+      createdAt = new Date(),
+      date = dayjs
+        .unix(createdAt.getTime() / 1000)
+        .format('YYYY-MM-DD HH:mm:ss');
     const sendMailOptions: ISendMailOptions = {
       to: email,
       subject: '用户邮箱验证',
-      template: path.resolve(__dirname, './template', 'validate-code'),
+      template: 'validate-code',
       context: {
         code, //验证码
         date, //日期
@@ -38,5 +44,36 @@ export class EmailService {
       email,
       createdAt,
     };
+  }
+
+  async sendEmailUrl(email: string, url: string) {
+    const createdAt = new Date(),
+      date = dayjs
+        .unix(createdAt.getTime() / 1000)
+        .format('YYYY-MM-DD HH:mm:ss');
+    const sendMailOptions: ISendMailOptions = {
+      to: email,
+      subject: '用户修改邮箱',
+      template: 'change-email',
+      context: {
+        date, //日期
+        url, //链接,
+      },
+    };
+    await this.mailerService.sendMail(sendMailOptions);
+    return {
+      email,
+      createdAt,
+    };
+  }
+
+  /** 邮箱校验 */
+  async verifyEmail(email: string, code: string) {
+    const verCode = await this.cacheManager.get(email);
+    if (verCode !== code) {
+      throw new BadRequestException('验证码错误');
+    } else {
+      await this.cacheManager.del(email);
+    }
   }
 }

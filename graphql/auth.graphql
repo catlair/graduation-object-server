@@ -1,23 +1,23 @@
-mutation Admin {
-  login(data: { email: "bart@simpson.com", password: "secret42" }) {
+mutation AuthUser($loginInput: LoginInput!) {
+  login(data: $loginInput) {
     ...AuthTokens
   }
 }
 
-mutation User {
-  login(data: { email: "lisa@simpson.com", password: "secret42" }) {
+mutation AddUser($input: SignupInput!) {
+  signup(data: $input) {
     ...AuthTokens
   }
 }
 
-mutation AuthUser {
-  signup(data: { email: "bart@simpson.com", password: "secret42" }) {
-    ...AuthTokens
+mutation Logout($refreshToken: String!) {
+  logout(token: $refreshToken) {
+    message
   }
 }
 
-mutation RefreshToken {
-  refreshToken(token: "REFRESH_TOKEN") {
+mutation RefreshToken($token: String!) {
+  refreshToken(token: $token) {
     ...TokenData
   }
 }
@@ -25,6 +25,9 @@ mutation RefreshToken {
 fragment UserData on User {
   id
   email
+  college
+  name
+  roles
 }
 
 fragment AuthTokens on Auth {

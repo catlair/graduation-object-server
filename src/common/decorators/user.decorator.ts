@@ -11,3 +11,11 @@ export const UserEntity = createParamDecorator(
     return req.user;
   },
 );
+
+export const BearerTokenEntity = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    const gqlReq = GqlExecutionContext.create(context).getContext().req;
+    const bearerToken = gqlReq.header('authorization');
+    return bearerToken.split(' ')[1];
+  },
+);

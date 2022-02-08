@@ -1,12 +1,14 @@
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { Role } from '@/user/models/user.model';
 
 @InputType()
 export class SignupInput {
@@ -19,7 +21,7 @@ export class SignupInput {
   email: string;
 
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(6)
   password: string;
 
   @IsNotEmpty()
@@ -28,4 +30,9 @@ export class SignupInput {
   @ValidateIf((o) => o.college)
   @IsString()
   college?: string;
+
+  @ValidateIf((o) => o.roles)
+  @IsEnum(Role, { each: true })
+  @Field(() => [Role], { nullable: true })
+  roles?: Role[];
 }

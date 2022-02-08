@@ -1,4 +1,4 @@
-import { Auth } from './models/auth.model';
+import { Auth, Logout } from './models/auth.model';
 import { Token } from '@/common/models/token.model';
 import { User } from '../user/models/user.model';
 import { LoginInput } from './dto/login.input';
@@ -10,8 +10,10 @@ import {
   ResolveField,
 } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
+import { GqlAuthGuard } from '@/common/guards';
 import { SignupInput } from './dto/signup.input';
 import { RefreshTokenInput } from './dto/refresh-token.input';
+import { UseGuards } from '@nestjs/common';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -28,9 +30,10 @@ export class AuthResolver {
   }
 
   @Mutation(() => Auth)
-  async login(@Args('data') { email, password }: LoginInput) {
+  async login(@Args('data') { email, password, id }: LoginInput) {
     const { accessToken, refreshToken } = await this.auth.login(
-      email.toLowerCase(),
+      email?.toLowerCase(),
+      id,
       password,
     );
 
@@ -38,6 +41,12 @@ export class AuthResolver {
       accessToken,
       refreshToken,
     };
+  }
+
+  @Mutation(() => Logout)
+  @UseGuards(GqlAuthGuard)
+  async logout(@Args() { token }: RefreshTokenInput) {
+    return await this.auth.logout(token);
   }
 
   @Mutation(() => Token)

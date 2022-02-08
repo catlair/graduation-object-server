@@ -8,52 +8,29 @@ generator client {
   // previewFeatures = []
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-}
+// generator dbml {
+//   provider = "prisma-dbml-generator"
+// }
+
+// generator nestgraphql {
+//   provider = "node node_modules/prisma-nestjs-graphql"
+//   output   = "../src/@generated/prisma-nestjs-graphql"
+// }
 
 model User {
-  id        String   @id @default(cuid())
+  id        Int      @id
   email     String   @unique
   name      String   @db.VarChar(20)
-  password  String   @db.VarChar(40)
+  password  String   @db.VarChar(80)
   // 学院
-  college   String   @db.VarChar(20)
+  college   String?  @db.VarChar(20)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  roles     Json     @default("[\"TEACHER\"]")
 
-  UserRole      UserRole[]
-  TeacherCourse TeacherCourse[]
+  teacherCourse TeacherCourse[]
+
   @@map("users")
-}
-
-model UserRole {
-  roleId String @map("role_id")
-  userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], map: "user_role_userId_fkey")
-
-  @@id([roleId, userId])
-  @@map("user_role")
-}
-
-model Role {
-  id   String    @id @default(cuid())
-  name RoleEenum
-
-  @@map("roles")
-}
-
-enum RoleEenum {
-  // 管理员
-  ADMIN
-  // 教导处主任
-  DIRECTOR
-  // 教导处副主任
-  VICE_DIRECTOR
-  // 教师
-  TEACHER
-  // 教师秘书
-  SECRETARY
 }
 
 // 课程
@@ -68,12 +45,12 @@ model Course {
 
 // 老师教授的课程
 model TeacherCourse {
-  teacherId String   @map("teacher_id")
+  teacherId Int      @map("teacher_id")
   courseId  String   @map("course_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  User User? @relation(fields: [teacherId], references: [id])
+  teacher User? @relation(fields: [teacherId], references: [id])
   @@id([teacherId, courseId])
   @@map("teacher_course")
 }
@@ -104,7 +81,7 @@ model PaperLife {
   content   String?
   createdAt DateTime   @default(now()) @map("created_at")
 
-  Paper Paper @relation(fields: [paperId], references: [id])
+  papper Paper @relation(fields: [paperId], references: [id])
   @@map("paper_lifes")
 }
 
@@ -126,7 +103,7 @@ model ManagerNotice {
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  UserNotice UserNotice[]
+  userNotice UserNotice[]
   @@map("manager_notices")
 }
 
@@ -140,6 +117,16 @@ model UserNotice {
   // 读取时间
   readAt          DateTime?
 
-  ManagerNotice ManagerNotice @relation(fields: [managerNoticeId], references: [id])
+  managerNotice ManagerNotice @relation(fields: [managerNoticeId], references: [id])
   @@map("user_notices")
+}
+
+// 刷新token
+model RefreshToken {
+  token     String   @unique @db.VarChar(32)
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([token, userId])
+  @@map("refresh_tokens")
 }

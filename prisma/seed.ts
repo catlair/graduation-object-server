@@ -4,47 +4,27 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.deleteMany();
-  await prisma.post.deleteMany();
 
   console.log('Seeding...');
 
   const user1 = await prisma.user.create({
     data: {
+      id: 22000001,
+      college: '电气与信息工程学院',
+      name: '李华',
       email: 'lisa@simpson.com',
-      firstname: 'Lisa',
-      lastname: 'Simpson',
-      password: '$2a$10$Gzlmt6U/ybAX/1E8/ppfb.22FgWYM9tZWmqHLsELRv0uJhUe9C9Si', // secret42
-      role: 'USER',
-      posts: {
-        create: {
-          title: 'Join us for Prisma Day 2019 in Berlin',
-          content: 'https://www.prisma.io/day/',
-          published: true,
-        },
-      },
+      password: '$2a$10$CmqjOLWpKpAC47v.FUgnOOBoi5y.K1KmbEgzaE5j01MM9eVL9sxoW', // 123456
+      roles: ['ADMIN', 'TEACHER'],
     },
   });
   const user2 = await prisma.user.create({
     data: {
+      name: '日本人',
+      college: '土木工程学院',
+      id: 22000002,
       email: 'bart@simpson.com',
-      firstname: 'Bart',
-      lastname: 'Simpson',
-      role: 'ADMIN',
-      password: '$2a$10$Cedn593eifTmJqGF3z3nguUbBtMyB2RPHjB/JdHGPfLinLaBs59/S', // secret42
-      posts: {
-        create: [
-          {
-            title: 'Subscribe to GraphQL Weekly for community news',
-            content: 'https://graphqlweekly.com/',
-            published: true,
-          },
-          {
-            title: 'Follow Prisma on Twitter',
-            content: 'https://twitter.com/prisma',
-            published: false,
-          },
-        ],
-      },
+      password: '$2b$10$jAk5OZlq6J9WegdA17iiNe26ysOY4jtgnQGNRwasiC.14CgysBMa.', // 123456
+      roles: ['SECRETARY'],
     },
   });
 

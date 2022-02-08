@@ -4,14 +4,27 @@ query Me {
   }
 }
 
-mutation UpdateUser {
-  updateUser(data: { firstname: "Bart", lastname: "Simpson" }) {
+mutation UpdateUser($data: UpdateUserInput!) {
+  updateUser(data: $data) {
     ...UserData
   }
 }
 
-mutation ChangePassword {
-  changePassword(data: { oldPassword: "secret42", newPassword: "secret42" }) {
+mutation ChangeEmail($data: ChangeEmailInput!) {
+  changeEmail(data: $data) {
+    email
+    userId
+  }
+}
+mutation UpdateEmail($data: UpdateEmailInput!) {
+  updateEmail(data: $data) {
+    email
+    userId
+  }
+}
+
+mutation ChangePassword($data: ChangePasswordInput!) {
+  changePassword(data: $data) {
     ...UserData
   }
 }
@@ -19,7 +32,7 @@ mutation ChangePassword {
 fragment UserData on User {
   id
   email
-  firstname
-  lastname
-  role
+  college
+  name
+  roles
 }
