@@ -16,6 +16,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 import { GqlThrottlerGuard } from './common/guards/gql-throttler.guard';
 import { TasksModule } from './tasks/tasks.module';
+import { CourseModule } from './course/course.module';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -75,6 +76,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
     AuthModule,
     UserModule,
     UploadModule,
+    CourseModule,
   ],
   providers: [
     {

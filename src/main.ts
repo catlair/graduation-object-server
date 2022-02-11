@@ -7,6 +7,7 @@ import { WinstonModule } from 'nest-winston';
 import winstonOptions from './common/config/logging';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { PrismaKnownFilter } from './common/exception/prisma-know.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,6 +25,7 @@ async function bootstrap() {
 
   // Prisma Client Exception Filter for unhandled exceptions
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new PrismaKnownFilter());
 
   const swagger = new DocumentBuilder()
     .setTitle('测试 api')

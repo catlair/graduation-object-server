@@ -36,6 +36,20 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+type Course {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  id: String!
+  name: String!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}
+
+input CreateCourseManyInput {
+  names: [String!]!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -57,19 +71,29 @@ type Logout {
   message: String
 }
 
+type Many {
+  count: Int!
+}
+
 type Mutation {
   changeEmail(data: ChangeEmailInput!): ChangeEmail!
   changePassword(data: ChangePasswordInput!): User!
+  createCourse: Course!
+  createCourseMany(data: CreateCourseManyInput!): Many!
   login(data: LoginInput!): Auth!
   logout(token: String!): Logout!
   refreshToken(token: String!): Token!
+  removeCourse(id: String!, name: String!): Course!
+  removeCourseMany(ids: [String!]!): Course!
   signup(data: SignupInput!): Auth!
+  updateCourse(id: String!): Course!
   updateEmail(data: UpdateEmailInput!): ChangeEmail!
   updateUser(data: UpdateUserInput!): User!
 }
 
 type Query {
   captcha: Captcha!
+  course(id: String!, name: String!): Course!
   emailCode(email: String!, name: String): Email!
   me: User!
   validateCaptcha(code: String!, key: String!): ValidateCaptcha!

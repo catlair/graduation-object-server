@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ isAbstract: true })
 export abstract class TimestampedModel {
@@ -15,6 +15,6 @@ export abstract class TimestampedModel {
 
 @ObjectType({ isAbstract: true })
 export abstract class BaseModel extends TimestampedModel {
-  @Field(() => ID)
+  @Field()
   id: string;
 }
