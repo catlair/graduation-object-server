@@ -1,6 +1,6 @@
 import { Auth, UserReq } from '@/decorators';
 import { Role } from '@/enums/role.enum';
-import { Body, Controller, Get, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { ChangePasswordDto } from './dto/change-password.dto';

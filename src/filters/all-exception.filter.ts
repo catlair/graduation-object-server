@@ -1,3 +1,4 @@
+import { ErrorInfoStructure } from '@/types';
 import { Catch, ArgumentsHost, HttpStatus, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Request, Response } from 'express';
@@ -12,9 +13,12 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     Logger.warn(`${request.method} ${request.url}`, exception);
 
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      code: exception?.code || -1,
-      url: request.url,
-      msg: '服务器异常',
-    });
+      success: false,
+      data: null,
+      errorCode: '-1',
+      errorMessage: exception?.message || '未知错误',
+      host: request.hostname,
+      showType: 0,
+    } as ErrorInfoStructure);
   }
 }

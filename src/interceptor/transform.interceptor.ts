@@ -1,3 +1,4 @@
+import { ErrorInfoStructure } from '@/types';
 import {
   Injectable,
   NestInterceptor,
@@ -7,8 +8,8 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface Response<T> {
-  result: T;
+export interface Response<T = any> extends ErrorInfoStructure {
+  data: T;
 }
 
 @Injectable()
@@ -24,7 +25,7 @@ export class TransformInterceptor<T>
         if (data.code && data.msg) {
           return data;
         } else {
-          return { code: 0, msg: '', result: data };
+          return { data, success: true } as Response<T>;
         }
       }),
     );

@@ -8,6 +8,5 @@ export class SendEmailCodeDto {
 
   @ValidateIf((o) => o.name)
   @IsString({ message: '验证码类型必须为字符串' })
-  @ApiProperty()
   name?: string;
 }

@@ -1,3 +1,4 @@
+import { ErrorInfoStructure } from '@/types';
 import {
   ExceptionFilter,
   Catch,
@@ -22,17 +23,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     Logger.log(`${request.method} ${request.url}`, exceptionMessage);
 
-    const { message } = originRes;
+    const { message, statusCode } = originRes;
     // 如果是数组，则转换成字符串
     const resMsg = message ? (isArray(message) ? message[0] : message) : '';
 
-    // 错误码为 1
-    const errorResponse = {
-      msg: resMsg || exceptionMessage,
-      code: status || 1,
-      url: request.url,
-    };
-
-    response.status(HttpStatus.OK).json(errorResponse);
+    response.status(HttpStatus.OK).json({
+      success: false,
+      errorCode: statusCode || status?.toString() || '1',
+      errorMessage: resMsg || exceptionMessage,
+      host: request.hostname,
+      data: null,
+    } as ErrorInfoStructure);
   }
 }

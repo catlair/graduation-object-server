@@ -39,7 +39,6 @@ export class EmailService {
     await this.cacheManager.set(key, code, { ttl: 300 });
 
     return {
-      code,
       name,
       email,
       createdAt,

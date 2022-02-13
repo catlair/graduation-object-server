@@ -1,3 +1,4 @@
+import { ErrorInfoStructure } from '@/types';
 import { Catch, ArgumentsHost } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Request, Response } from 'express';
@@ -5,7 +6,7 @@ import { ResponseException } from '../exception';
 
 @Catch(ResponseException)
 export class ResponseExceptionFilter extends BaseExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  catch(exception: ResponseException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -14,13 +15,12 @@ export class ResponseExceptionFilter extends BaseExceptionFilter {
     const status = exception.getStatus();
     const code = exception.getCode();
 
-    // 错误码为 1
-    const errorResponse = {
-      msg: originRes,
-      code: code || 1,
-      url: request.url,
-    };
-
-    response.status(status).json(errorResponse);
+    response.status(status).json({
+      success: false,
+      errorCode: code || '1',
+      errorMessage: originRes,
+      host: request.hostname,
+      data: null,
+    } as ErrorInfoStructure);
   }
 }

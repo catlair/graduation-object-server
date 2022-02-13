@@ -5,6 +5,8 @@ import { AuthService } from './auth.service';
 import { isEmail, isNumberString } from 'class-validator';
 import type { Request } from 'express';
 import { isNumber } from 'lodash';
+import { LoginEmailUserDto } from './dto/login-user.dto';
+import { validateErrThrow } from '@/utils';
 
 // loacal strategy
 // 用于登录
@@ -24,6 +26,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     username: string,
     password: string,
   ): Promise<any> {
+    validateErrThrow(LoginEmailUserDto, { username, password });
+
     let keyName: 'email' | 'id';
     let value: string | number = username;
     const ua = req.header('user-agent');
@@ -39,5 +43,27 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       throw new BadRequestException('用户名格式错误');
     }
     return await this.authService.loginValidate(value, keyName, password, ua);
+  }
+}
+
+@Injectable()
+export class LocalEmailStrategy extends PassportStrategy(
+  Strategy,
+  'local-email',
+) {
+  constructor(private readonly authService: AuthService) {
+    super({
+      passwordField: 'code',
+      usernameField: 'email',
+      passReqToCallback: true,
+    } as IStrategyOptionsWithRequest);
+  }
+
+  async validate(req: Request, email: string, code: string): Promise<any> {
+    validateErrThrow(LoginEmailUserDto, { email, code });
+
+    const ua = req.header('user-agent');
+
+    return await this.authService.loginByEmail(email, code, ua);
   }
 }

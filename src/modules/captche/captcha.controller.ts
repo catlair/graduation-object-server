@@ -14,9 +14,4 @@ export class CaptchaController {
   getSvgCaptcha() {
     return this.captchaService.getSvgCaptcha();
   }
-
-  // @Get('validate')
-  // validateCaptcha(@Args() { key, code }: ValidateCaptchaArgs) {
-  //   return this.captchaService.validateCaptcha(key, code);
-  // }
 }

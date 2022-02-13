@@ -1,7 +1,8 @@
 import {
   BadRequestException,
-  ConflictException,
+  CACHE_MANAGER,
   ForbiddenException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,13 +10,14 @@ import { JwtService } from '@nestjs/jwt';
 import { HashingService } from '@/utils/hashing.service';
 import { PrismaService } from 'nestjs-prisma';
 import { ConfigService } from '@nestjs/config';
-import { Prisma, RefreshToken, User } from '@prisma/client';
+import { RefreshToken, User } from '@prisma/client';
 import { Configuration } from '@/config/configuration';
 import { isString } from 'class-validator';
 import * as crypto from 'crypto';
 import * as UAParser from 'ua-parser-js';
 import { UA } from './interface/ua.interface';
 import { Token } from '@/types';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +26,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly hashingService: HashingService,
     private readonly configService: ConfigService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   async loginValidate(
@@ -74,6 +77,34 @@ export class AuthService {
     };
   }
 
+  async loginByEmail(
+    email: string,
+    code: string,
+    userAgent: string,
+    name?: string,
+  ) {
+    const key = name ? `${name}-${email}` : email;
+    const cacheCode = await this.cacheManager.get(key);
+    if (cacheCode !== code) {
+      throw new BadRequestException('验证码错误');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new BadRequestException('邮箱不存在');
+    }
+
+    const tokenObj = await this.generateTokens(user);
+    await this.setRefreshToken(user.id, tokenObj.refreshToken, userAgent);
+    delete user.password;
+    return {
+      ...tokenObj,
+      user,
+    };
+  }
+
   async generateTokens(user: User): Promise<Token> {
     return {
       accessToken: this.generateAccessToken(user),
@@ -105,21 +136,19 @@ export class AuthService {
     const oldRefreshToken = await this.prisma.refreshToken.findUnique({
       where: { token_userId: { token: this.hashStr(token), userId: id } },
     });
-    // 刷新时需要获取用户信息
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
-
     if (!oldRefreshToken) {
       throw new UnauthorizedException();
     }
+    // 刷新时需要获取用户信息
     const ua = this.initUserAgent(userAgent);
     const validate = this.validateUA(ua, oldRefreshToken);
-
     if (!validate) {
       throw new ForbiddenException('账号异常');
     }
 
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
     const tokenObj = await this.generateTokens(user);
     await this.setRefreshToken(id, tokenObj.refreshToken, ua, token);
     return tokenObj;

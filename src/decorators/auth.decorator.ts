@@ -1,6 +1,6 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../modules/auth/auth.guard';
+import { JwtAuthGuard, JwtUnloginGuard } from '../modules/auth/auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Role } from '../enums/role.enum';
 import { AllowUnlogin } from './allow-unlogin.decorator';
@@ -23,7 +23,7 @@ export function Auth(...roles: Role[]) {
 export function AuthUnlogin() {
   return applyDecorators(
     AllowUnlogin(),
-    UseGuards(JwtAuthGuard),
+    UseGuards(JwtUnloginGuard),
     ApiBearerAuth(),
   );
 }

@@ -1,4 +1,9 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { StatusCodeEnum } from '@/enums/status-code-emum';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_ALLOW_UNLOGIN_KEY } from '../../decorators';
@@ -9,12 +14,32 @@ import { IS_ALLOW_UNLOGIN_KEY } from '../../decorators';
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {}
 
+@Injectable()
+export class LocalEmailAuthGuard extends AuthGuard('local-email') {}
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  handleRequest(err, user, info) {
+    // You can throw an exception based on either "info" or "err" arguments
+    if (info && info.message === 'jwt expired') {
+      throw new UnauthorizedException({
+        statusCode: StatusCodeEnum.LOGIN_EXPIRED,
+        message: '登录已过期',
+      });
+    }
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
+  }
+}
+
 // 为了在用户不登录的情况下通过
 // 而登录的情况获取到 user 的信息
 // 使用了下面不得已的办法，使用时在路由上加上 @AllowUnlogin
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class JwtUnloginGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }
@@ -29,8 +54,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (isAllowUnlogin) {
       try {
-        const user = await super.canActivate(context);
-        return user;
+        return await super.canActivate(context);
       } catch {
         return true;
       }

@@ -28,7 +28,7 @@ import { CacheConfigService } from '@/config/cache.service';
           })}>`,
         },
         template: {
-          dir: path.resolve(process.cwd(), './dist/template'),
+          dir: path.resolve(process.cwd(), './dist/email/template'),
           adapter: new EjsAdapter(),
           options: {},
         },
