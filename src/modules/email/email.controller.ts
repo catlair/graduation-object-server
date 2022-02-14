@@ -9,7 +9,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @Post('send')
+  @Post('captcha')
   @Throttle(4)
   @ApiOperation({ summary: '发送邮箱验证码' })
   emailCode(@Body() { email, name }: SendEmailCodeDto) {

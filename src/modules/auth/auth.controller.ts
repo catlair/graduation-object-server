@@ -17,20 +17,18 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    @Body() _loginUserDto: LoginUserDto,
+    @Body() _: LoginUserDto,
     @UserLoggedIn() tokens: Token & { user: User },
   ) {
-    _loginUserDto.username;
     return tokens;
   }
 
   @UseGuards(LocalEmailAuthGuard)
   @Post('login/email')
   async loginByEmail(
-    @Body() _loginUserDto: LoginEmailUserDto,
+    @Body() _: LoginEmailUserDto,
     @UserLoggedIn() tokens: Token & { user: User },
   ) {
-    _loginUserDto.code;
     return tokens;
   }
 

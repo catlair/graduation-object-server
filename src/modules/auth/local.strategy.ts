@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { isEmail, isNumberString } from 'class-validator';
 import type { Request } from 'express';
 import { isNumber } from 'lodash';
-import { LoginEmailUserDto } from './dto/login-user.dto';
+import { LoginEmailUserDto, LoginUserDto } from './dto/login-user.dto';
 import { validateErrThrow } from '@/utils';
 
 // loacal strategy
@@ -26,7 +26,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     username: string,
     password: string,
   ): Promise<any> {
-    validateErrThrow(LoginEmailUserDto, { username, password });
+    validateErrThrow(LoginUserDto, { username, password });
 
     let keyName: 'email' | 'id';
     let value: string | number = username;

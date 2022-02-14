@@ -22,6 +22,9 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
+        if (!data) {
+          return null;
+        }
         if (data.code && data.msg) {
           return data;
         } else {
