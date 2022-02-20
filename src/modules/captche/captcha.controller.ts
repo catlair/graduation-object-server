@@ -9,7 +9,7 @@ export class CaptchaController {
   constructor(private readonly captchaService: CaptchaService) {}
 
   @Get('svg')
-  @Throttle(10)
+  @Throttle(15)
   @ApiOperation({ summary: '获取验证码svg图片' })
   getSvgCaptcha() {
     return this.captchaService.getSvgCaptcha();

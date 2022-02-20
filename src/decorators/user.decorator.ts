@@ -12,7 +12,10 @@ export const UserReq = createParamDecorator(
   },
 );
 
-export const UserLoggedIn = createParamDecorator(
+/**
+ * 好处是不用获取数据库
+ */
+export const UserJwt = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext) => {
     return ctx.switchToHttp().getRequest().user;
   },

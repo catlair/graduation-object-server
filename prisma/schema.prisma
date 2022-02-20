@@ -14,65 +14,55 @@ model User {
   name      String   @db.VarChar(20)
   password  String   @db.VarChar(80)
   // 学院
-  college   String?  @db.VarChar(20)
+  college   String   @db.VarChar(20)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   roles     Json     @default("[\"TEACHER\"]")
 
-  teacherCourse TeacherCourse[]
+  papers        Paper[]
+  collegeEntity College @relation(fields: [college], references: [name])
 
   @@map("users")
-}
-
-// 课程
-model Course {
-  id        String   @id @default(cuid())
-  name      String   @unique @db.VarChar(20)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("courses")
-}
-
-// 老师教授的课程
-model TeacherCourse {
-  teacherId Int      @map("teacher_id")
-  courseId  String   @map("course_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  teacher User? @relation(fields: [teacherId], references: [id])
-  @@id([teacherId, courseId])
-  @@map("teacher_course")
 }
 
 // 试卷
 model Paper {
   id        String     @id @default(cuid())
-  courseId  String     @map("course_id")
-  name      String?    @unique
+  // 课程名称
+  course    String     @db.VarChar(20)
+  // 学院名称
+  college   String     @db.VarChar(24)
+  // 发布教师
+  teacherId Int        @map("teacher_id")
+  // 备注
+  remark    String?
   // 试卷状态
   status    PaperEenum
+  // 试卷 a 名称
+  aName     String     @map("a_name") @db.VarChar(50)
+  // 试卷 b 名称
+  bName     String     @map("b_name") @db.VarChar(50)
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
 
-  lifes PaperLife[]
-
+  lifes   PaperLife[]
+  teacher User?       @relation(fields: [teacherId], references: [id])
   @@map("papers")
 }
 
 // 试卷审核周期
 model PaperLife {
-  id        String     @id @default(cuid())
-  paperId   String     @map("paper_id")
-  // 审核人
-  userId    String     @map("user_id")
+  id        String         @id @default(cuid())
+  paperId   String         @map("paper_id")
+  // 操作人
+  userId    Int            @map("user_id")
   // 审核状态
-  status    PaperEenum
+  status    PaperLifeEenum
   content   String?
-  createdAt DateTime   @default(now()) @map("created_at")
+  images    Json?          @default("[]")
+  createdAt DateTime       @default(now()) @map("created_at")
 
-  papper Paper @relation(fields: [paperId], references: [id])
+  paper Paper @relation(fields: [paperId], references: [id])
   @@map("paper_lifes")
 }
 
@@ -83,6 +73,21 @@ enum PaperEenum {
   PASS
   // 审核不通过
   REJECT
+  // 试卷已打印
+  PRINT
+}
+
+enum PaperLifeEenum {
+  // 创建试卷
+  CREATE
+  // 重新上传
+  UPDATE
+  // 审核通过
+  PASS
+  // 审核不通过
+  REJECT
+  // 试卷已打印
+  PRINT
 }
 
 // 系统发出通知
@@ -123,4 +128,13 @@ model RefreshToken {
 
   @@id([token, userId])
   @@map("refresh_tokens")
+}
+
+// 学院
+model College {
+  id   Int    @id
+  name String @unique @db.VarChar(20)
+
+  User User[]
+  @@map("colleges")
 }

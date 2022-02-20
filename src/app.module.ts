@@ -14,6 +14,9 @@ import { UploadModule } from './modules/upload/upload.module';
 import { EmailModule } from './modules/email/email.module';
 import { CaptchaModule } from './modules/captche/captcha.module';
 import { UsersModule } from './modules/user/users.module';
+import { CheckModule } from './modules/check/check.module';
+import { PaperModule } from './modules/paper/paper.module';
+import { CollegeModule } from './modules/college/college.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -54,6 +57,9 @@ const NODE_ENV = process.env.NODE_ENV;
     EmailModule,
     CaptchaModule,
     UsersModule,
+    CheckModule,
+    PaperModule,
+    CollegeModule,
   ],
   providers: [
     {

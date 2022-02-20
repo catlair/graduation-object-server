@@ -4,7 +4,7 @@ import { LocalAuthGuard, LocalEmailAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { LoginEmailUserDto, LoginUserDto } from './dto/login-user.dto';
 import { Token } from '@/types';
-import { Auth, Headers, UserLoggedIn } from '@/decorators';
+import { Auth, Headers, UserJwt } from '@/decorators';
 import { User } from '@prisma/client';
 import { LogoutUserDto } from './dto/logout-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -18,7 +18,7 @@ export class AuthController {
   @Post('login')
   async login(
     @Body() _: LoginUserDto,
-    @UserLoggedIn() tokens: Token & { user: User },
+    @UserJwt() tokens: Token & { user: User },
   ) {
     return tokens;
   }
@@ -27,7 +27,7 @@ export class AuthController {
   @Post('login/email')
   async loginByEmail(
     @Body() _: LoginEmailUserDto,
-    @UserLoggedIn() tokens: Token & { user: User },
+    @UserJwt() tokens: Token & { user: User },
   ) {
     return tokens;
   }

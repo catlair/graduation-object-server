@@ -6,7 +6,7 @@ import * as path from 'path';
 
 export const paperStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve('/home/catlair/github/bs/server', './uploads'));
+    cb(null, path.resolve('/Users/Desktop/git/server', './uploads'));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
