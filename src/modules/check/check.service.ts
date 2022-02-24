@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { PaperEnum } from '@prisma/client';
+import { PrismaService } from 'nestjs-prisma';
+import { JwtDto } from '../auth/dto/jwt.dto';
 import { CreateCheckDto } from './dto/create-check.dto';
-import { UpdateCheckDto } from './dto/update-check.dto';
 
 @Injectable()
 export class CheckService {
-  create(createCheckDto: CreateCheckDto) {
-    return 'This action adds a new check';
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all check`;
-  }
+  async create(createCheckDto: CreateCheckDto, user: JwtDto) {
+    const { status } = createCheckDto;
+    await this.prisma.paper.update({
+      where: { id: createCheckDto.paperId },
+      data: { status } as { status: PaperEnum },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} check`;
-  }
-
-  update(id: number, updateCheckDto: UpdateCheckDto) {
-    return `This action updates a #${id} check`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} check`;
+    return this.prisma.paperLife.create({
+      data: {
+        ...createCheckDto,
+        userId: user.id,
+      },
+    });
   }
 }

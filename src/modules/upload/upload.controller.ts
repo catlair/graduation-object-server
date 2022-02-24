@@ -6,22 +6,40 @@ import {
   UploadedFiles,
   Param,
   UseInterceptors,
+  Delete,
+  Res,
+  Get,
 } from '@nestjs/common';
 import {
   AnyFilesInterceptor,
   FileFieldsInterceptor,
 } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+  ApiResponseProperty,
+} from '@nestjs/swagger';
 import {
   PaperUploadDto,
   PaperUploadQueries,
   PaperUploadUpdateDto,
 } from './dto/paper-upload.dto';
 import { UploadService } from './upload.service';
-import { paperFilter, paperStorage } from './utils';
+import {
+  paperFilter,
+  paperStorage,
+  pictureFilter,
+  pictureStorage,
+} from './utils';
 import { Auth, UserJwt } from '@/decorators';
 import { JwtDto } from '../auth/dto/jwt.dto';
 import { Role } from '@/enums/role.enum';
+import { downloadFileHeader } from '@/utils';
+import type { Response } from 'express';
+import path = require('path');
+import fs = require('fs');
 
 @Controller('upload')
 @ApiTags('文件上传')
@@ -68,11 +86,53 @@ export class UploadController {
       fileFilter: paperFilter,
     }),
   )
-  uploadFile(
+  updatePaperFile(
     @UploadedFiles() files: Express.Multer.File[],
     @Param('id') id: string,
     @UserJwt() user: JwtDto,
   ) {
-    return this.uploadService.uploadFile(files, id, user);
+    return this.uploadService.updatePaperFile(files, id, user);
+  }
+
+  @Post('picture')
+  @Auth()
+  @ApiOperation({ summary: '上传图片' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ description: '上传图片', type: PaperUploadUpdateDto })
+  @UseInterceptors(
+    AnyFilesInterceptor({
+      storage: pictureStorage,
+      fileFilter: pictureFilter,
+    }),
+  )
+  uploadPicture(@UploadedFiles() files: Express.Multer.File[]) {
+    return {
+      path: files[0].filename,
+    };
+  }
+
+  @Delete('picture/:path')
+  @Auth()
+  @ApiOperation({ summary: '删除图片' })
+  deletePicture(@Param('path') imgPath: string) {
+    return this.uploadService.deletePicture(imgPath);
+  }
+
+  @Get('/:filepath/:filename')
+  @ApiOperation({ summary: '获取文件' })
+  @ApiResponseProperty({
+    format: 'binary',
+  })
+  findOne(
+    @Param('filepath') filepath: string,
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    console.log(12312321);
+
+    const dir = path.resolve(process.cwd(), `./uploads/${filepath}`);
+    res.set(downloadFileHeader(filename));
+    const file = fs.createReadStream(path.resolve(dir, filename));
+    file.pipe(res);
   }
 }

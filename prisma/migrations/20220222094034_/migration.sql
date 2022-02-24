@@ -35,7 +35,7 @@ CREATE TABLE `paper_lifes` (
     `paper_id` VARCHAR(191) NOT NULL,
     `user_id` INTEGER NOT NULL,
     `status` ENUM('CREATE', 'UPDATE', 'PASS', 'REJECT', 'PRINT') NOT NULL,
-    `content` VARCHAR(191) NULL,
+    `content` VARCHAR(191) NOT NULL,
     `images` JSON NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

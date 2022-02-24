@@ -7,7 +7,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { PaperEenum, User, PaperLifeEenum } from '@prisma/client';
+import { PaperEnum, User, PaperLifeEnum, Prisma } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
 import { JwtDto } from '../auth/dto/jwt.dto';
 import { CreatePaperDto } from './dto/create-paper.dto';
@@ -21,7 +21,7 @@ export class PaperService {
     const paper = await this.prisma.paper.create({
       data: {
         ...createPaperDto,
-        status: PaperEenum.WAITING,
+        status: PaperEnum.WAITING,
         teacherId: user.id,
       },
     });
@@ -30,7 +30,7 @@ export class PaperService {
         userId: user.id,
         content: createPaperDto.remark,
         paperId: paper.id,
-        status: PaperLifeEenum.CREATE,
+        status: PaperLifeEnum.CREATE,
       },
     });
     return paper;
@@ -81,15 +81,20 @@ export class PaperService {
   }
 
   async findOne(id: string, user: User) {
-    const paper = await this.prisma.paper.findUnique({
-      where: { id },
-    });
-    if (!paper) {
-      return null;
-    }
     const roles = user.roles as Role[];
     const isDirector =
       roles.includes(Role.DIRECTOR) || roles.includes(Role.VICE_DIRECTOR);
+    const query: Prisma.PaperFindUniqueArgs = { where: { id } };
+
+    if (isDirector) {
+      query.include = { teacher: true };
+    }
+
+    const paper = await this.prisma.paper.findUnique(query);
+    if (!paper) {
+      return null;
+    }
+
     if (isDirector || paper.teacherId === user.id) {
       return paper;
     } else {
@@ -111,7 +116,7 @@ export class PaperService {
         data: {
           paperId: id,
           userId: user.id,
-          status: PaperLifeEenum.UPDATE,
+          status: PaperLifeEnum.UPDATE,
           content: updatePaperDto.content,
         },
       });
@@ -121,7 +126,7 @@ export class PaperService {
 
     return await this.prisma.paper.update({
       where: { id },
-      data: { status: PaperEenum.WAITING },
+      data: { status: PaperEnum.WAITING },
     });
   }
 }

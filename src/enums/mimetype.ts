@@ -5,3 +5,14 @@ export const Mimetype = {
 };
 
 export const paperTypes = [Mimetype.doc, Mimetype.docx, Mimetype.pdf];
+
+export const imgTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/bmp',
+  'image/webp',
+  'image/svg+xml',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+];

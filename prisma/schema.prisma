@@ -27,23 +27,23 @@ model User {
 
 // 试卷
 model Paper {
-  id        String     @id @default(cuid())
+  id        String    @id @default(cuid())
   // 课程名称
-  course    String     @db.VarChar(20)
+  course    String    @db.VarChar(20)
   // 学院名称
-  college   String     @db.VarChar(24)
+  college   String    @db.VarChar(24)
   // 发布教师
-  teacherId Int        @map("teacher_id")
+  teacherId Int       @map("teacher_id")
   // 备注
   remark    String?
   // 试卷状态
-  status    PaperEenum
+  status    PaperEnum
   // 试卷 a 名称
-  aName     String     @map("a_name") @db.VarChar(50)
+  aName     String    @map("a_name") @db.VarChar(50)
   // 试卷 b 名称
-  bName     String     @map("b_name") @db.VarChar(50)
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  bName     String    @map("b_name") @db.VarChar(50)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
   lifes   PaperLife[]
   teacher User?       @relation(fields: [teacherId], references: [id])
@@ -52,21 +52,21 @@ model Paper {
 
 // 试卷审核周期
 model PaperLife {
-  id        String         @id @default(cuid())
-  paperId   String         @map("paper_id")
+  id        String        @id @default(cuid())
+  paperId   String        @map("paper_id")
   // 操作人
-  userId    Int            @map("user_id")
+  userId    Int           @map("user_id")
   // 审核状态
-  status    PaperLifeEenum
-  content   String?
-  images    Json?          @default("[]")
-  createdAt DateTime       @default(now()) @map("created_at")
+  status    PaperLifeEnum
+  content   String
+  images    Json?         @default("[]")
+  createdAt DateTime      @default(now()) @map("created_at")
 
   paper Paper @relation(fields: [paperId], references: [id])
   @@map("paper_lifes")
 }
 
-enum PaperEenum {
+enum PaperEnum {
   // 待审核
   WAITING
   // 审核通过
@@ -77,7 +77,7 @@ enum PaperEenum {
   PRINT
 }
 
-enum PaperLifeEenum {
+enum PaperLifeEnum {
   // 创建试卷
   CREATE
   // 重新上传

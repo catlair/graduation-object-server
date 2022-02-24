@@ -53,7 +53,11 @@ export class UploadService {
     };
   }
 
-  async uploadFile(files: Express.Multer.File[], id: string, user: JwtDto) {
+  async updatePaperFile(
+    files: Express.Multer.File[],
+    id: string,
+    user: JwtDto,
+  ) {
     const { fieldname, destination, filename } = files[0];
     if (fieldname !== 'a' && fieldname !== 'b') {
       return null;
@@ -87,5 +91,12 @@ export class UploadService {
     }
 
     return re;
+  }
+
+  deletePicture(imgPath: string) {
+    fs.unlinkSync(path.resolve(process.cwd(), './uploads/img', imgPath));
+    return {
+      path: imgPath,
+    };
   }
 }

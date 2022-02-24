@@ -16,6 +16,12 @@ async function bootstrap() {
     logger: WinstonModule.createLogger(winstonOptions),
   });
 
+  // 跨域
+  app.enableCors({
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: '*',
+  });
+
   // 在 mian 中获取配置
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('port');

@@ -27,7 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     // 如果是数组，则转换成字符串
     const resMsg = message ? (isArray(message) ? message[0] : message) : '';
 
-    response.status(HttpStatus.OK).json({
+    response.status(status || HttpStatus.OK).json({
       success: false,
       errorCode: statusCode || status?.toString() || '1',
       errorMessage: resMsg || exceptionMessage,

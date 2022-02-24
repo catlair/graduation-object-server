@@ -4,7 +4,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerStorageRedisService } from 'nestjs-throttler-storage-redis';
 import { configuration, Configuration } from './config/configuration';
 import { APP_GUARD } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from '~/auth/auth.module';
+import { resolve } from 'path';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from 'nestjs-prisma';
@@ -32,6 +34,9 @@ const NODE_ENV = process.env.NODE_ENV;
         '.env',
       ],
       load: [configuration],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(process.cwd(), 'public'),
     }),
     PrismaModule.forRoot({
       isGlobal: true,

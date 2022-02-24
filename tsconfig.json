@@ -22,5 +22,5 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "exclude": ["node_modules", "uploads", "dist"]
+  "exclude": ["node_modules", "uploads", "dist", "public"]
 }
