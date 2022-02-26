@@ -1,19 +1,18 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, Length } from 'class-validator';
 
 export class ChangePasswordDto {
+  @ApiProperty()
   @IsNotEmpty()
-  @MinLength(6)
+  @Length(6, 20, {
+    message: '密码长度必须在6-20之间',
+  })
   oldPassword: string;
 
+  @ApiProperty()
   @IsNotEmpty()
-  @MinLength(6)
-  newPassword: string;
-
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  code: string;
+  @Length(6, 20, {
+    message: '密码长度必须在6-20之间',
+  })
+  password: string;
 }

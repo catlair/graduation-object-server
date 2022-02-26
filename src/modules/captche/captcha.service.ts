@@ -29,9 +29,6 @@ export class CaptchaService {
 
   async validateCaptcha(key: string, code: string) {
     const captcha = await this.cacheManager.get(key);
-    return {
-      valid: captcha === code,
-      code,
-    };
+    return captcha === code;
   }
 }

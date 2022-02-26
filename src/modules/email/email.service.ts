@@ -71,8 +71,7 @@ export class EmailService {
     const verCode = await this.cacheManager.get(email);
     if (verCode !== code) {
       throw new BadRequestException('验证码错误');
-    } else {
-      await this.cacheManager.del(email);
     }
+    await this.cacheManager.del(email);
   }
 }

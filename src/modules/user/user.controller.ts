@@ -1,10 +1,22 @@
 import { Auth, UserReq } from '@/decorators';
 import { Role } from '@/enums/role.enum';
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { fuzzyEmail } from '@/utils/transformer';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import {
   ChangeEmailDto,
   UpdateEmailDto,
@@ -24,10 +36,18 @@ export class UserController {
     return await this.userService.createUser(data);
   }
 
+  @Delete(':id')
+  @Auth(Role.ADMIN)
+  @ApiOperation({ summary: '删除用户' })
+  async deleteUser(@Param('id', new ParseIntPipe()) id: number) {
+    return this.userService.deleteUser(id);
+  }
+
   @Auth()
   @Get('me')
   @ApiOperation({ summary: '获取个人信息' })
   async user(@UserReq() user: User) {
+    user.email = fuzzyEmail(user.email);
     return user;
   }
 
@@ -36,16 +56,6 @@ export class UserController {
   @ApiOperation({ summary: '获取所有用户' })
   async allUsers() {
     return await this.userService.getAllUser();
-  }
-
-  @Auth()
-  @Patch()
-  @ApiOperation({ summary: '更新用户信息' })
-  async updateUser(
-    @UserReq() user: User,
-    @Body('data') newUserData: UpdateUserDto,
-  ) {
-    return this.userService.updateUser(user.id, newUserData);
   }
 
   @Auth()
@@ -65,7 +75,7 @@ export class UserController {
   @Patch('password')
   @ApiOperation({ summary: '更新密码' })
   async changePassword(
-    @UserReq() user: User,
+    @UserReq(true) user: User,
     @Body() changePassword: ChangePasswordDto,
   ) {
     return this.userService.changePassword(
@@ -73,5 +83,29 @@ export class UserController {
       user.password,
       changePassword,
     );
+  }
+
+  @Auth()
+  @Patch('password/reset')
+  @ApiOperation({ summary: '重置密码' })
+  async resetPassword(
+    @UserReq() user: User,
+    @Body() payload: ResetPasswordDto,
+  ) {
+    return this.userService.resetPassword(user.id, payload);
+  }
+
+  @Auth()
+  @Patch(':id')
+  @ApiOperation({ summary: '更新用户信息' })
+  async updateUser(
+    @UserReq() user: User,
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body('data') newUserData: UpdateUserDto,
+  ) {
+    if (!(user.roles as string[]).includes(Role.ADMIN) || user.id !== id) {
+      throw new ForbiddenException();
+    }
+    return this.userService.updateUser(user.id, newUserData);
   }
 }

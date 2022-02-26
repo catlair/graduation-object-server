@@ -14,6 +14,7 @@ import { Cache } from 'cache-manager';
 import { randomUUID } from 'node:crypto';
 import { ChangeEmailDto, UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -57,6 +58,12 @@ export class UsersService {
     }
   }
 
+  deleteUser(userId: number) {
+    return this.prisma.user.delete({
+      where: { id: userId },
+    });
+  }
+
   getAllUser() {
     return this.prisma.user.findMany();
   }
@@ -71,9 +78,9 @@ export class UsersService {
   }
 
   /** 修改邮箱 */
-  async changeEmail(userId: number, { email, code }: ChangeEmailDto) {
+  async changeEmail(userId: number, { email, code, oldEmail }: ChangeEmailDto) {
     // 验证邮箱验证码
-    await this.emailService.verifyEmail(email, code);
+    await this.emailService.verifyEmail(oldEmail, code);
     // 邮箱是否已经被注册
     const userExist = await this.prisma.user.findUnique({
       where: { email },
@@ -85,7 +92,10 @@ export class UsersService {
     // 发送邮件
     await Promise.all([
       this.cacheManager.set(key + userId, email, { ttl: 300 }),
-      this.emailService.sendEmailUrl(email, key),
+      this.emailService.sendEmailUrl(
+        email,
+        'http://localhost:8000/settings/email/' + key,
+      ),
     ]);
     return {
       email,
@@ -106,6 +116,7 @@ export class UsersService {
       },
       where: { id: userId },
     });
+    this.cacheManager.del(key + userId);
 
     return {
       email,
@@ -120,8 +131,6 @@ export class UsersService {
     changePassword: ChangePasswordDto,
   ) {
     // 验证邮箱验证码
-    const { email, code } = changePassword;
-    await this.emailService.verifyEmail(email, code);
     const passwordValid = await this.hashingService.match(
       changePassword.oldPassword,
       userPassword,
@@ -131,18 +140,30 @@ export class UsersService {
       throw new BadRequestException('密码错误');
     }
 
-    return this.updatePassword(userId, changePassword.newPassword);
+    return this.updatePassword(userId, changePassword.password);
+  }
+
+  /** 重置密码 （需要邮箱） */
+  async resetPassword(userId: number, resetPassword: ResetPasswordDto) {
+    // 验证邮箱验证码
+    const { email, code } = resetPassword;
+    await this.emailService.verifyEmail(email, code);
+    return this.updatePassword(userId, resetPassword.password);
   }
 
   /** 更新密码 */
   async updatePassword(userId: number, newPassword: string) {
     const hashedPassword = await this.hashingService.get(newPassword);
-
-    return await this.prisma.user.update({
+    const user = await this.prisma.user.update({
       data: {
         password: hashedPassword,
       },
       where: { id: userId },
     });
+    // 需要重新登录
+    this.prisma.refreshToken.deleteMany({
+      where: { userId },
+    });
+    return user;
   }
 }

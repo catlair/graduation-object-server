@@ -128,8 +128,8 @@ export class UploadController {
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
-    console.log(12312321);
-
+    filename = decodeURIComponent(filename);
+    filepath = decodeURIComponent(filepath);
     const dir = path.resolve(process.cwd(), `./uploads/${filepath}`);
     res.set(downloadFileHeader(filename));
     const file = fs.createReadStream(path.resolve(dir, filename));

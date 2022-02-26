@@ -7,13 +7,17 @@ import type { Request } from 'express';
 import { isNumber } from 'lodash';
 import { LoginEmailUserDto, LoginUserDto } from './dto/login-user.dto';
 import { validateErrThrow } from '@/utils';
+import { CaptchaService } from '../captche/captcha.service';
 
 // loacal strategy
 // 用于登录
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly captchaService: CaptchaService,
+  ) {
     super({
       passwordField: 'password',
       usernameField: 'username',
@@ -31,6 +35,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     let keyName: 'email' | 'id';
     let value: string | number = username;
     const ua = req.header('user-agent');
+    const { code, key } = req.body;
+
+    const valid = await this.captchaService.validateCaptcha(key, code);
+    if (!valid) {
+      throw new BadRequestException('验证码错误');
+    }
 
     if (isEmail(username)) {
       keyName = 'email';

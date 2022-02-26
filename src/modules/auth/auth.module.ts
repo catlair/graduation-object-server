@@ -10,6 +10,7 @@ import { Configuration } from '@/config/configuration';
 import { JwtStrategy } from './jwt.strategy';
 import { CacheConfigService } from '@/config/cache.service';
 import { HashingService } from '@/utils/hashing.service';
+import { CaptchaService } from '../captche/captcha.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { HashingService } from '@/utils/hashing.service';
   ],
   providers: [
     AuthService,
+    CaptchaService,
     LocalStrategy,
     LocalEmailStrategy,
     JwtStrategy,

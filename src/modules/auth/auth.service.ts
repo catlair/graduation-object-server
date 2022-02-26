@@ -18,6 +18,7 @@ import * as UAParser from 'ua-parser-js';
 import { UA } from './interface/ua.interface';
 import { Token } from '@/types';
 import { Cache } from 'cache-manager';
+import { fuzzyEmail } from '@/utils/transformer';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +56,7 @@ export class AuthService {
     const tokenObj = await this.generateTokens(user);
     await this.setRefreshToken(user.id, tokenObj.refreshToken, userAgent);
     delete user.password;
+    user.email = fuzzyEmail(user.email);
     return {
       ...tokenObj,
       user,
@@ -99,6 +101,7 @@ export class AuthService {
     const tokenObj = await this.generateTokens(user);
     await this.setRefreshToken(user.id, tokenObj.refreshToken, userAgent);
     delete user.password;
+    user.email = fuzzyEmail(user.email);
     return {
       ...tokenObj,
       user,
