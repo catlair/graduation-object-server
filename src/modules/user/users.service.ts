@@ -15,6 +15,7 @@ import { randomUUID } from 'node:crypto';
 import { ChangeEmailDto, UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { pagination } from '@/utils/transformer';
 
 @Injectable()
 export class UsersService {
@@ -64,8 +65,23 @@ export class UsersService {
     });
   }
 
-  getAllUser() {
-    return this.prisma.user.findMany();
+  async getAllUser() {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        roles: true,
+        college: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    return pagination(
+      users,
+      { current: 1, pageSize: users.length },
+      users.length,
+    );
   }
 
   updateUser(userId: number, newUserData: UpdateUserDto) {

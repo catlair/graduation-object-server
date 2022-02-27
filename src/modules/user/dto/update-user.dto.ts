@@ -1,12 +1,35 @@
+import { Role } from '@/enums/role.enum';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNumber, IsString, IsUUID, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsString,
+  IsUUID,
+  Length,
+  ValidateIf,
+} from 'class-validator';
 
 export class UpdateUserDto {
+  @ValidateIf((o) => o.name)
   @ApiProperty()
+  @IsString()
   name?: string;
 
+  @ValidateIf((o) => o.college)
   @ApiProperty()
+  @IsString()
   college?: string;
+
+  @ValidateIf((o) => o.roles)
+  @ApiProperty()
+  @IsEnum(Role)
+  roles?: Role;
+
+  @ValidateIf((o) => o.email)
+  @ApiProperty()
+  @IsEmail()
+  email?: string;
 }
 
 export class ChangeEmailDto {

@@ -119,6 +119,7 @@ export class UploadController {
   }
 
   @Get('/:filepath/:filename')
+  @Auth()
   @ApiOperation({ summary: '获取文件' })
   @ApiResponseProperty({
     format: 'binary',

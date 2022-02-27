@@ -101,11 +101,11 @@ export class UserController {
   async updateUser(
     @UserReq() user: User,
     @Param('id', new ParseIntPipe()) id: number,
-    @Body('data') newUserData: UpdateUserDto,
+    @Body() newUserData: UpdateUserDto,
   ) {
-    if (!(user.roles as string[]).includes(Role.ADMIN) || user.id !== id) {
+    if (!(user.roles as string[]).includes(Role.ADMIN) && user.id !== id) {
       throw new ForbiddenException();
     }
-    return this.userService.updateUser(user.id, newUserData);
+    return this.userService.updateUser(id, newUserData);
   }
 }
