@@ -30,7 +30,7 @@ export class PaperController {
   }
 
   @Get()
-  @Auth(Role.DIRECTOR, Role.VICE_DIRECTOR)
+  @Auth(Role.DIRECTOR, Role.VICE_DIRECTOR, Role.SECRETARY)
   @ApiOperation({ summary: '获取本学院试卷列表' })
   findAllByCollege(@UserReq() user: User, @Query() page: PageParams) {
     return this.paperService.findAllByCollege(user, page);
