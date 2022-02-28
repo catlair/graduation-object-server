@@ -19,6 +19,7 @@ import { UsersModule } from './modules/user/users.module';
 import { CheckModule } from './modules/check/check.module';
 import { PaperModule } from './modules/paper/paper.module';
 import { CollegeModule } from './modules/college/college.module';
+import { NoticeModule } from './modules/notice/notice.module';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -65,8 +66,10 @@ const NODE_ENV = process.env.NODE_ENV;
     CheckModule,
     PaperModule,
     CollegeModule,
+    NoticeModule,
   ],
   providers: [
+    
     {
       /** 节流器 */
       provide: APP_GUARD,

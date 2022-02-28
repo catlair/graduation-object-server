@@ -25,7 +25,7 @@ export class PaperController {
   @Post()
   @Auth(Role.TEACHER)
   @ApiOperation({ summary: '创建试卷' })
-  create(@Body() createPaperDto: CreatePaperDto, @UserJwt() user: JwtDto) {
+  create(@Body() createPaperDto: CreatePaperDto, @UserReq() user: User) {
     return this.paperService.create(createPaperDto, user);
   }
 
@@ -63,7 +63,7 @@ export class PaperController {
   update(
     @Param('id') id: string,
     @Body() updatePaperDto: UpdatePaperDto,
-    @UserJwt() user: JwtDto,
+    @UserReq() user: User,
   ) {
     return this.paperService.update(id, updatePaperDto, user);
   }

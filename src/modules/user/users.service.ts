@@ -182,4 +182,18 @@ export class UsersService {
     });
     return user;
   }
+
+  getNotices(userId: number) {
+    return this.prisma.userNotice.findMany({
+      where: { userId },
+      include: {
+        managerNotice: true,
+      },
+      orderBy: {
+        managerNotice: {
+          createdAt: 'desc',
+        },
+      },
+    });
+  }
 }

@@ -40,6 +40,7 @@ import { downloadFileHeader } from '@/utils';
 import type { Response } from 'express';
 import path = require('path');
 import fs = require('fs');
+import { ErrorInfoStructure } from '@/types';
 
 @Controller('upload')
 @ApiTags('文件上传')
@@ -134,6 +135,14 @@ export class UploadController {
     const dir = path.resolve(process.cwd(), `./uploads/${filepath}`);
     res.set(downloadFileHeader(filename));
     const file = fs.createReadStream(path.resolve(dir, filename));
+    file.on('error', () => {
+      res.status(404).send({
+        data: null,
+        errorCode: '404',
+        errorMessage: '文件不存在',
+        success: false,
+      } as ErrorInfoStructure);
+    });
     file.pipe(res);
   }
 }

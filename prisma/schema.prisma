@@ -58,7 +58,7 @@ model PaperLife {
   userId    Int           @map("user_id")
   // 审核状态
   status    PaperLifeEnum
-  content   String
+  content   String?
   images    Json?         @default("[]")
   createdAt DateTime      @default(now()) @map("created_at")
 
@@ -96,7 +96,7 @@ model ManagerNotice {
   title     String   @db.VarChar(40)
   content   String?
   // 触发人
-  userId    String   @map("user_id")
+  userId    Int      @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
 
   userNotice UserNotice[]
@@ -105,15 +105,15 @@ model ManagerNotice {
 
 // 用户接收通知
 model UserNotice {
-  id              String    @id @default(cuid())
-  userId          String    @map("user_id")
-  managerNoticeId String    @map("manager_notice_id")
+  id       String    @id @default(cuid())
+  userId   Int       @map("user_id")
+  noticeId String    @map("notice_id")
   // 是否已读
-  read            Boolean   @default(false)
+  read     Boolean   @default(false)
   // 读取时间
-  readAt          DateTime?
+  readAt   DateTime?
 
-  managerNotice ManagerNotice @relation(fields: [managerNoticeId], references: [id])
+  managerNotice ManagerNotice @relation(fields: [noticeId], references: [id])
   @@map("user_notices")
 }
 

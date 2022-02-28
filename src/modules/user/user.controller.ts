@@ -1,4 +1,4 @@
-import { Auth, UserReq } from '@/decorators';
+import { Auth, UserJwt, UserReq } from '@/decorators';
 import { Role } from '@/enums/role.enum';
 import { fuzzyEmail } from '@/utils/transformer';
 import {
@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { JwtDto } from '../auth/dto/jwt.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -107,5 +108,13 @@ export class UserController {
       throw new ForbiddenException();
     }
     return this.userService.updateUser(id, newUserData);
+  }
+
+  /** 获取通知 */
+  @Get('notices')
+  @Auth(Role.DIRECTOR, Role.VICE_DIRECTOR, Role.TEACHER, Role.SECRETARY)
+  @ApiOperation({ summary: '获取通知' })
+  async getNotices(@UserJwt() user: JwtDto) {
+    return await this.userService.getNotices(user.id);
   }
 }

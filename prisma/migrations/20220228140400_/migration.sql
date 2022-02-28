@@ -35,7 +35,7 @@ CREATE TABLE `paper_lifes` (
     `paper_id` VARCHAR(191) NOT NULL,
     `user_id` INTEGER NOT NULL,
     `status` ENUM('CREATE', 'UPDATE', 'PASS', 'REJECT', 'PRINT') NOT NULL,
-    `content` VARCHAR(191) NOT NULL,
+    `content` VARCHAR(191) NULL,
     `images` JSON NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -47,7 +47,7 @@ CREATE TABLE `manager_notices` (
     `id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(40) NOT NULL,
     `content` VARCHAR(191) NULL,
-    `user_id` VARCHAR(191) NOT NULL,
+    `user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -56,8 +56,8 @@ CREATE TABLE `manager_notices` (
 -- CreateTable
 CREATE TABLE `user_notices` (
     `id` VARCHAR(191) NOT NULL,
-    `user_id` VARCHAR(191) NOT NULL,
-    `manager_notice_id` VARCHAR(191) NOT NULL,
+    `user_id` INTEGER NOT NULL,
+    `notice_id` VARCHAR(191) NOT NULL,
     `read` BOOLEAN NOT NULL DEFAULT false,
     `readAt` DATETIME(3) NULL,
 
@@ -96,4 +96,4 @@ ALTER TABLE `papers` ADD CONSTRAINT `papers_teacher_id_fkey` FOREIGN KEY (`teach
 ALTER TABLE `paper_lifes` ADD CONSTRAINT `paper_lifes_paper_id_fkey` FOREIGN KEY (`paper_id`) REFERENCES `papers`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `user_notices` ADD CONSTRAINT `user_notices_manager_notice_id_fkey` FOREIGN KEY (`manager_notice_id`) REFERENCES `manager_notices`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `user_notices` ADD CONSTRAINT `user_notices_notice_id_fkey` FOREIGN KEY (`notice_id`) REFERENCES `manager_notices`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

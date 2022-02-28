@@ -70,33 +70,41 @@ export class UploadService {
 
     const ext = path.extname(filename),
       paperName = fieldname === 'a' ? paper.aName : paper.bName,
-      paperExt = path.extname(paperName),
-      basename = path.basename(paperName, paperExt);
+      paperExt = path.extname(paperName);
 
     const re = {
       [fieldname]: this.renameFile(files[0], fieldname, paper, user),
     };
 
-    // 如果文档类型被改变，则删除原文档，并更新路径
-    if (ext !== paperExt) {
-      fs.unlinkSync(`${destination}/${paperName}`);
-      fs.unlinkSync(`${destination}/${basename}.pdf`);
+    try {
+      // 如果文档类型被改变，则删除原文档，并更新路径
+      if (ext !== paperExt) {
+        fs.unlinkSync(`${destination}/${paperName}`);
 
-      await this.prisma.paper.update({
-        where: { id },
-        data: {
-          [`${fieldname}Name`]: re[fieldname],
-        },
-      });
+        await this.prisma.paper.update({
+          where: { id },
+          data: {
+            [`${fieldname}Name`]: re[fieldname],
+          },
+        });
+      }
+    } catch (error) {
+      Logger.error(error.message || error, 'UploadUpdate');
+      return re;
     }
 
     return re;
   }
 
   deletePicture(imgPath: string) {
-    fs.unlinkSync(path.resolve(process.cwd(), './uploads/img', imgPath));
-    return {
-      path: imgPath,
-    };
+    try {
+      fs.unlinkSync(path.resolve(process.cwd(), './uploads/img', imgPath));
+      return {
+        path: imgPath,
+      };
+    } catch (error) {
+      Logger.error(error.message || error, 'Upload');
+      return null;
+    }
   }
 }

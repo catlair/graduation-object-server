@@ -1,4 +1,5 @@
 import dayjs from '@/utils/dayjs';
+import { getNowTime } from '@/utils/time';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import {
   CACHE_MANAGER,
@@ -20,11 +21,9 @@ export class EmailService {
    * @param email 邮件
    */
   async sendEmailCode(email: string, name?: string) {
-    const code = Math.random().toString().slice(-6),
-      createdAt = new Date(),
-      date = dayjs
-        .unix(createdAt.getTime() / 1000)
-        .format('YYYY-MM-DD HH:mm:ss');
+    const code = Math.random().toString().slice(-6);
+    const { date, createdAt } = getNowTime();
+
     const sendMailOptions: ISendMailOptions = {
       to: email,
       subject: '用户邮箱验证',
@@ -46,10 +45,7 @@ export class EmailService {
   }
 
   async sendEmailUrl(email: string, url: string) {
-    const createdAt = new Date(),
-      date = dayjs
-        .unix(createdAt.getTime() / 1000)
-        .format('YYYY-MM-DD HH:mm:ss');
+    const { date, createdAt } = getNowTime();
     const sendMailOptions: ISendMailOptions = {
       to: email,
       subject: '用户修改邮箱',
@@ -73,5 +69,24 @@ export class EmailService {
       throw new BadRequestException('验证码错误');
     }
     await this.cacheManager.del(email);
+  }
+
+  /** 发送通知 */
+  async sendNotice(email: string, title: string, notice = '') {
+    const { date, createdAt } = getNowTime();
+    const sendMailOptions: ISendMailOptions = {
+      to: email,
+      subject: title || '用户通知',
+      template: 'notice',
+      context: {
+        date, //日期
+        notice: notice || title, //通知
+      },
+    };
+    await this.mailerService.sendMail(sendMailOptions);
+    return {
+      email,
+      createdAt,
+    };
   }
 }
