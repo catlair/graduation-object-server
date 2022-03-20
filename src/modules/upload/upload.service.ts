@@ -14,7 +14,7 @@ export class UploadService {
 
   private renameFile(
     files: Express.Multer.File,
-    fieldname: string,
+    fieldname: 'aName' | 'bName',
     query: PaperUploadQueries,
     user: JwtDto,
   ) {
@@ -74,7 +74,7 @@ export class UploadService {
       paperExt = path.extname(paperName);
 
     const re = {
-      [fieldname]: this.renameFile(files[0], fieldname, paper, user),
+      [fieldname]: this.renameFile(files[0], `${fieldname}Name`, paper, user),
     };
 
     try {
