@@ -23,7 +23,7 @@ export class UpdateUserDto {
 
   @ValidateIf((o) => o.roles)
   @ApiProperty()
-  @IsEnum(Role)
+  @IsEnum(Role, { each: true })
   roles?: Role;
 
   @ValidateIf((o) => o.email)
