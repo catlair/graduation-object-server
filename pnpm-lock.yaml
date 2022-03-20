@@ -57,6 +57,7 @@ specifiers:
   passport-local: ^1.0.0
   prettier: ^2.5.1
   prisma: ^3.9.2
+  prisma-exclude: ^1.0.1
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
   rxjs: ^7.5.4
@@ -104,6 +105,7 @@ dependencies:
   passport: registry.npmmirror.com/passport/0.5.2
   passport-jwt: registry.npmmirror.com/passport-jwt/4.0.0
   passport-local: registry.npmmirror.com/passport-local/1.0.0
+  prisma-exclude: registry.npmmirror.com/prisma-exclude/1.0.1_57aef17709219198be129b465126e766
   reflect-metadata: registry.npmmirror.com/reflect-metadata/0.1.13
   rimraf: registry.npmmirror.com/rimraf/3.0.2
   rxjs: registry.npmmirror.com/rxjs/7.5.4
@@ -2469,7 +2471,7 @@ packages:
     dev: false
 
   registry.npmmirror.com/colors/1.4.0:
-    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/colors/download/colors-1.4.0.tgz}
+    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/colors/-/colors-1.4.0.tgz}
     name: colors
     version: 1.4.0
     engines: {node: '>=0.1.90'}
@@ -5997,6 +5999,19 @@ packages:
       uuid: registry.npmmirror.com/uuid/8.3.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  registry.npmmirror.com/prisma-exclude/1.0.1_57aef17709219198be129b465126e766:
+    resolution: {integrity: sha512-A+sfrw8W/VYthrHKmPIoh3aLih9mvEEQxxq4P+q6ZzjTxAdRajEz9DYR9RMB92WGmlc3y3uQn+Z2UaiOvF8FcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prisma-exclude/-/prisma-exclude-1.0.1.tgz}
+    id: registry.npmmirror.com/prisma-exclude/1.0.1
+    name: prisma-exclude
+    version: 1.0.1
+    peerDependencies:
+      '@prisma/client': ^3.10.0
+      prisma: ^3.10.0
+    dependencies:
+      '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2
+      prisma: registry.npmmirror.com/prisma/3.9.2
     dev: false
 
   registry.npmmirror.com/prisma/3.9.2:

@@ -15,7 +15,8 @@ import { randomUUID } from 'node:crypto';
 import { ChangeEmailDto, UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { pagination } from '@/utils/transformer';
+import { fuzzyEmail, pagination } from '@/utils/transformer';
+import { excludePassword } from '@/utils/prisma';
 
 @Injectable()
 export class UsersService {
@@ -36,13 +37,7 @@ export class UsersService {
           password: hashedPassword,
           roles,
         },
-        select: {
-          id: true,
-          email: true,
-          roles: true,
-          college: true,
-          createdAt: true,
-        },
+        select: excludePassword,
       });
     } catch (e) {
       if (
@@ -67,18 +62,13 @@ export class UsersService {
 
   async getAllUser() {
     const users = await this.prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        roles: true,
-        college: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: excludePassword,
     });
     return pagination(
-      users,
+      users.map((user) => {
+        user.email = fuzzyEmail(user.email);
+        return user;
+      }),
       { current: 1, pageSize: users.length },
       users.length,
     );
@@ -90,6 +80,7 @@ export class UsersService {
       where: {
         id: userId,
       },
+      select: excludePassword,
     });
   }
 
@@ -175,6 +166,7 @@ export class UsersService {
         password: hashedPassword,
       },
       where: { id: userId },
+      select: excludePassword,
     });
     // 需要重新登录
     this.prisma.refreshToken.deleteMany({
