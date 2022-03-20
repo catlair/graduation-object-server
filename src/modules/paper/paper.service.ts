@@ -13,6 +13,7 @@ import { JwtDto } from '../auth/dto/jwt.dto';
 import { NoticeService } from '../notice/notice.service';
 import { CreatePaperDto } from './dto/create-paper.dto';
 import { UpdatePaperDto } from './dto/update-paper.dto';
+import { excludePassword } from '@/utils/prisma';
 
 @Injectable()
 export class PaperService {
@@ -93,7 +94,11 @@ export class PaperService {
     const query: Prisma.PaperFindUniqueArgs = { where: { id } };
 
     if (isDirector) {
-      query.include = { teacher: true };
+      query.include = {
+        teacher: {
+          select: excludePassword,
+        },
+      };
     }
 
     const paper = await this.prisma.paper.findUnique(query);
@@ -152,8 +157,6 @@ export class PaperService {
         },
       },
     });
-    console.log(users);
-
     this.noticeService.create(users, {
       userId: user.id,
       title,

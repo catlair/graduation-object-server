@@ -6,6 +6,7 @@ import fs = require('fs');
 import { PaperUploadQueries } from './dto/paper-upload.dto';
 import { JwtDto } from '../auth/dto/jwt.dto';
 import { PrismaService } from 'nestjs-prisma';
+import { getPaperName } from '../paper/utils';
 
 @Injectable()
 export class UploadService {
@@ -17,9 +18,9 @@ export class UploadService {
     query: PaperUploadQueries,
     user: JwtDto,
   ) {
-    const name = `${user.id}$${query.course}$${fieldname}`;
+    const paperName = getPaperName(query.course, user.id)[fieldname];
     const ext = path.extname(files.filename);
-    const thatPath = `${files.destination}/${name}`;
+    const thatPath = `${files.destination}/${paperName}`;
     const filename = `${thatPath}${ext}`;
     // 异步的进行，成功失败对后续操作不影响
     if (ext !== '.pdf') {
@@ -28,7 +29,7 @@ export class UploadService {
       });
     }
     fs.renameSync(files.path, filename);
-    return `${name}${ext}`;
+    return `${paperName}${ext}`;
   }
 
   uploadPaperFile(
@@ -48,8 +49,8 @@ export class UploadService {
     } = files;
 
     return {
-      a: this.renameFile(a, 'a', query, user),
-      b: this.renameFile(b, 'b', query, user),
+      a: this.renameFile(a, 'aName', query, user),
+      b: this.renameFile(b, 'bName', query, user),
     };
   }
 
