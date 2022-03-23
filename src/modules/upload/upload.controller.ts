@@ -87,12 +87,8 @@ export class UploadController {
       fileFilter: paperFilter,
     }),
   )
-  updatePaperFile(
-    @UploadedFiles() files: Express.Multer.File[],
-    @Param('id') id: string,
-    @UserJwt() user: JwtDto,
-  ) {
-    return this.uploadService.updatePaperFile(files, id, user);
+  updatePaperFile(@UploadedFiles() files: Express.Multer.File[]) {
+    return this.uploadService.updatePaperFile(files);
   }
 
   @Post('picture')

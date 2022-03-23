@@ -17,7 +17,7 @@ specifiers:
   '@nestjs/serve-static': ^2.2.2
   '@nestjs/swagger': ^5.2.0
   '@nestjs/throttler': ^2.0.0
-  '@prisma/client': ^3.9.2
+  '@prisma/client': ^3.11.0
   '@types/bcrypt': ^5.0.0
   '@types/cache-manager': ^3.4.2
   '@types/cron': ^1.7.3
@@ -56,7 +56,7 @@ specifiers:
   passport-jwt: ^4.0.0
   passport-local: ^1.0.0
   prettier: ^2.5.1
-  prisma: ^3.9.2
+  prisma: ^3.11.0
   prisma-exclude: ^1.0.1
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
@@ -73,7 +73,7 @@ specifiers:
   winston: ^3.5.1
 
 dependencies:
-  '@devoxa/prisma-relay-cursor-connection': registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/2.1.0_@prisma+client@3.9.2
+  '@devoxa/prisma-relay-cursor-connection': registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/2.1.0_@prisma+client@3.11.0
   '@nestjs-modules/mailer': registry.npmmirror.com/@nestjs-modules/mailer/1.6.1_2733d0f84f85db5775dd4381eb471e55
   '@nestjs/common': registry.npmmirror.com/@nestjs/common/8.2.6_6686f1d73a399753b561a58a608807ad
   '@nestjs/config': registry.npmmirror.com/@nestjs/config/1.1.7_b1c87d49cb3cb6bde37bc22ce42ae20e
@@ -85,7 +85,7 @@ dependencies:
   '@nestjs/serve-static': registry.npmmirror.com/@nestjs/serve-static/2.2.2_732a54a2558f64827b8cc4f9baac4f1f
   '@nestjs/swagger': registry.npmmirror.com/@nestjs/swagger/5.2.0_4528991a3f165f06456f8ba2d0ab7a53
   '@nestjs/throttler': registry.npmmirror.com/@nestjs/throttler/2.0.0_d86dd164971a98d71cc003a4f36ff106
-  '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2
+  '@prisma/client': registry.npmmirror.com/@prisma/client/3.11.0_prisma@3.11.0
   bcrypt: registry.npmmirror.com/bcrypt/5.0.1
   cache-manager: registry.npmmirror.com/cache-manager/3.6.0
   cache-manager-redis-store: registry.npmmirror.com/cache-manager-redis-store/2.0.0
@@ -98,14 +98,14 @@ dependencies:
   libreoffice-convert: registry.npmmirror.com/libreoffice-convert/1.3.5
   lodash: registry.npmmirror.com/lodash/4.17.21
   nest-winston: registry.npmmirror.com/nest-winston/1.6.2_123fa90839df4a282122a14333c111b8
-  nestjs-prisma: registry.npmmirror.com/nestjs-prisma/0.15.1_49d0f7e8fc0357b63860cca6ac3e9289
+  nestjs-prisma: registry.npmmirror.com/nestjs-prisma/0.15.1_3b68a48edc212f2564d88a0db617c633
   nestjs-throttler-storage-redis: registry.npmmirror.com/nestjs-throttler-storage-redis/0.1.18_4d1da1f5a792917d8f3237fd97a68343
   node-docto: registry.npmmirror.com/node-docto/0.3.2
   nodemailer: registry.npmmirror.com/nodemailer/6.7.2
   passport: registry.npmmirror.com/passport/0.5.2
   passport-jwt: registry.npmmirror.com/passport-jwt/4.0.0
   passport-local: registry.npmmirror.com/passport-local/1.0.0
-  prisma-exclude: registry.npmmirror.com/prisma-exclude/1.0.1_57aef17709219198be129b465126e766
+  prisma-exclude: registry.npmmirror.com/prisma-exclude/1.0.1_3f54654ac5a9664acd79fc193c7c0231
   reflect-metadata: registry.npmmirror.com/reflect-metadata/0.1.13
   rimraf: registry.npmmirror.com/rimraf/3.0.2
   rxjs: registry.npmmirror.com/rxjs/7.5.4
@@ -138,7 +138,7 @@ devDependencies:
   eslint-plugin-prettier: registry.npmmirror.com/eslint-plugin-prettier/4.0.0_43197c8d12d1d439034cfcf65e1c48c2
   husky: registry.npmmirror.com/husky/7.0.4
   prettier: registry.npmmirror.com/prettier/2.5.1
-  prisma: registry.npmmirror.com/prisma/3.9.2
+  prisma: registry.npmmirror.com/prisma/3.11.0
   source-map-support: registry.npmmirror.com/source-map-support/0.5.21
   ts-loader: registry.npmmirror.com/ts-loader/9.2.6_typescript@4.5.5+webpack@5.68.0
   ts-node: registry.npmmirror.com/ts-node/10.5.0_241ff727c41c38f37d2c0695b583de34
@@ -679,7 +679,7 @@ packages:
       kuler: registry.npmmirror.com/kuler/2.0.0
     dev: false
 
-  registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/2.1.0_@prisma+client@3.9.2:
+  registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/2.1.0_@prisma+client@3.11.0:
     resolution: {integrity: sha512-rtZKFXzodHYfts+ODJJ1DsDykJJjGC7fOvD+QAsm4mu+enK5rA1Ezw+tAB17CrQOroXX6/iEJKdgiEB5drz3Ww==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/-/prisma-relay-cursor-connection-2.1.0.tgz}
     id: registry.npmmirror.com/@devoxa/prisma-relay-cursor-connection/2.1.0
     name: '@devoxa/prisma-relay-cursor-connection'
@@ -687,7 +687,7 @@ packages:
     peerDependencies:
       '@prisma/client': ^2.0.0 || ^3.0.0
     dependencies:
-      '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2
+      '@prisma/client': registry.npmmirror.com/@prisma/client/3.11.0_prisma@3.11.0
       graphql-fields: registry.npmmirror.com/graphql-fields/2.0.3
     dev: false
 
@@ -1116,11 +1116,11 @@ packages:
       - encoding
     dev: false
 
-  registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2:
-    resolution: {integrity: sha512-VlEIYVMyfFZHbVBOlunPl47gmP/Z0zzPjPj8I7uKEIaABqrUy50ru3XS0aZd8GFvevVwt7p91xxkUjNjrWhKAQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/client/-/client-3.9.2.tgz}
-    id: registry.npmmirror.com/@prisma/client/3.9.2
+  registry.npmmirror.com/@prisma/client/3.11.0_prisma@3.11.0:
+    resolution: {integrity: sha512-d42o/tlalaWMmNOR4r5BiR6YYTYEV82eZ2lNKOm5ht3WyYwI9e+zy2MyZnNO4Fx5e08RAhW+GRVcEgKl5faUaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/client/-/client-3.11.0.tgz}
+    id: registry.npmmirror.com/@prisma/client/3.11.0
     name: '@prisma/client'
-    version: 3.9.2
+    version: 3.11.0
     engines: {node: '>=12.6'}
     requiresBuild: true
     peerDependencies:
@@ -1129,20 +1129,20 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': registry.npmmirror.com/@prisma/engines-version/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
-      prisma: registry.npmmirror.com/prisma/3.9.2
+      '@prisma/engines-version': registry.npmmirror.com/@prisma/engines-version/3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b
+      prisma: registry.npmmirror.com/prisma/3.11.0
     dev: false
 
-  registry.npmmirror.com/@prisma/engines-version/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
-    resolution: {integrity: sha512-5Dh+qTDhpPR66w6NNAnPs+/W/Qt4r1DSd+qhfPFcDThUK4uxoZKGlPb2IYQn5LL+18aIGnmteDf7BnVMmvBNSQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/engines-version/-/engines-version-3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009.tgz}
+  registry.npmmirror.com/@prisma/engines-version/3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b:
+    resolution: {integrity: sha512-bhMW1XybXZyqCf+9QqjP7Oi7xgVHcISVyOZNMm51qeZsy12M1RtHaCcXUFeMMV0JOCZZuPFVr3+0KVpQqK35CQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/engines-version/-/engines-version-3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b.tgz}
     name: '@prisma/engines-version'
-    version: 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+    version: 3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b
     dev: false
 
-  registry.npmmirror.com/@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
-    resolution: {integrity: sha512-qM+uJbkelB21bnK44gYE049YTHIjHysOuj0mj5U2gDGyNLfmiazlggzFPCgEjgme4U5YB2tYs6Z5Hq08Kl8pjA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/engines/-/engines-3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009.tgz}
+  registry.npmmirror.com/@prisma/engines/3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b:
+    resolution: {integrity: sha512-m9iZd5F5vP6A2IvKWfHpOO/qK8OOO9nbsV/pdyEkF/1WNe0E8SIWFBKb+HcMLkG9OFbDDBy8QItXmp/mIULuwQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@prisma/engines/-/engines-3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b.tgz}
     name: '@prisma/engines'
-    version: 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+    version: 3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b
     requiresBuild: true
     dev: true
 
@@ -5409,7 +5409,7 @@ packages:
       winston: registry.npmmirror.com/winston/3.5.1
     dev: false
 
-  registry.npmmirror.com/nestjs-prisma/0.15.1_49d0f7e8fc0357b63860cca6ac3e9289:
+  registry.npmmirror.com/nestjs-prisma/0.15.1_3b68a48edc212f2564d88a0db617c633:
     resolution: {integrity: sha512-3h22u0RsRwZt+p6WkXvR8wRJzpcnSieTBrxkcUV7UT2BfQmz/9QaGaOHqBEzow0+S3WpHja2hHFgQERHlWZ91Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/nestjs-prisma/-/nestjs-prisma-0.15.1.tgz}
     id: registry.npmmirror.com/nestjs-prisma/0.15.1
     name: nestjs-prisma
@@ -5424,9 +5424,9 @@ packages:
       '@angular-devkit/schematics': registry.npmmirror.com/@angular-devkit/schematics/13.2.3
       '@nestjs/common': registry.npmmirror.com/@nestjs/common/8.2.6_6686f1d73a399753b561a58a608807ad
       '@nestjs/platform-express': registry.npmmirror.com/@nestjs/platform-express/8.2.6_732a54a2558f64827b8cc4f9baac4f1f
-      '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2
+      '@prisma/client': registry.npmmirror.com/@prisma/client/3.11.0_prisma@3.11.0
       '@schematics/angular': registry.npmmirror.com/@schematics/angular/13.1.4
-      prisma: registry.npmmirror.com/prisma/3.9.2
+      prisma: registry.npmmirror.com/prisma/3.11.0
     transitivePeerDependencies:
       - chokidar
     dev: false
@@ -6001,7 +6001,7 @@ packages:
       - supports-color
     dev: false
 
-  registry.npmmirror.com/prisma-exclude/1.0.1_57aef17709219198be129b465126e766:
+  registry.npmmirror.com/prisma-exclude/1.0.1_3f54654ac5a9664acd79fc193c7c0231:
     resolution: {integrity: sha512-A+sfrw8W/VYthrHKmPIoh3aLih9mvEEQxxq4P+q6ZzjTxAdRajEz9DYR9RMB92WGmlc3y3uQn+Z2UaiOvF8FcQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prisma-exclude/-/prisma-exclude-1.0.1.tgz}
     id: registry.npmmirror.com/prisma-exclude/1.0.1
     name: prisma-exclude
@@ -6010,19 +6010,19 @@ packages:
       '@prisma/client': ^3.10.0
       prisma: ^3.10.0
     dependencies:
-      '@prisma/client': registry.npmmirror.com/@prisma/client/3.9.2_prisma@3.9.2
-      prisma: registry.npmmirror.com/prisma/3.9.2
+      '@prisma/client': registry.npmmirror.com/@prisma/client/3.11.0_prisma@3.11.0
+      prisma: registry.npmmirror.com/prisma/3.11.0
     dev: false
 
-  registry.npmmirror.com/prisma/3.9.2:
-    resolution: {integrity: sha512-i9eK6cexV74OgeWaH3+e6S07kvC9jEZTl6BqtBH398nlCU0tck7mE9dicY6YQd+euvMjjCtY89q4NgmaPnUsSg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prisma/-/prisma-3.9.2.tgz}
+  registry.npmmirror.com/prisma/3.11.0:
+    resolution: {integrity: sha512-8SdsLPhKR3mOfoo2o73h9mNn3v5kA/RqGA26Sv6qDS78Eh2uepPqt5e8/nwj5EOblYm5HEGuitaXQrOCLb6uTw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/prisma/-/prisma-3.11.0.tgz}
     name: prisma
-    version: 3.9.2
+    version: 3.11.0
     engines: {node: '>=12.6'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': registry.npmmirror.com/@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+      '@prisma/engines': registry.npmmirror.com/@prisma/engines/3.11.0-48.b371888aaf8f51357c7457d836b86d12da91658b
     dev: true
 
   registry.npmmirror.com/process-nextick-args/2.0.1:

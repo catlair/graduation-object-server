@@ -5,13 +5,10 @@ import path = require('path');
 import fs = require('fs');
 import { PaperUploadQueries } from './dto/paper-upload.dto';
 import { JwtDto } from '../auth/dto/jwt.dto';
-import { PrismaService } from 'nestjs-prisma';
 import { getPaperName } from '../paper/utils';
 
 @Injectable()
 export class UploadService {
-  constructor(private readonly prisma: PrismaService) {}
-
   private renameFile(
     files: Express.Multer.File,
     fieldname: 'aName' | 'bName',
@@ -22,13 +19,13 @@ export class UploadService {
     const ext = path.extname(files.filename);
     const thatPath = `${files.destination}/${paperName}`;
     const filename = `${thatPath}${ext}`;
+    fs.renameSync(files.path, filename);
     // 异步的进行，成功失败对后续操作不影响
     if (ext !== '.pdf') {
       word2pdf(filename, `${thatPath}.pdf`).catch((err) => {
-        Logger.log(err.message || err, 'UploadController');
+        Logger.log(err.message || err, 'UploadService');
       });
     }
-    fs.renameSync(files.path, filename);
     return `${paperName}${ext}`;
   }
 
@@ -47,54 +44,23 @@ export class UploadService {
       a: [a],
       b: [b],
     } = files;
+    const prefix = query.course + user.id;
 
     return {
-      a: this.renameFile(a, 'aName', query, user),
-      b: this.renameFile(b, 'bName', query, user),
+      a: prefix + 'a' + path.extname(a.filename),
+      b: prefix + 'b' + path.extname(b.filename),
     };
   }
 
-  async updatePaperFile(
-    files: Express.Multer.File[],
-    id: string,
-    user: JwtDto,
-  ) {
-    const { fieldname, destination, filename } = files[0];
+  async updatePaperFile(files: Express.Multer.File[]) {
+    const { fieldname, filename } = files[0];
     if (fieldname !== 'a' && fieldname !== 'b') {
       return null;
     }
 
-    const paper = await this.prisma.paper.findUnique({
-      where: { id },
-      select: { course: true, aName: true, bName: true },
-    });
-
-    const ext = path.extname(filename),
-      paperName = fieldname === 'a' ? paper.aName : paper.bName,
-      paperExt = path.extname(paperName);
-
-    const re = {
-      [fieldname]: this.renameFile(files[0], `${fieldname}Name`, paper, user),
+    return {
+      filename,
     };
-
-    try {
-      // 如果文档类型被改变，则删除原文档，并更新路径
-      if (ext !== paperExt) {
-        fs.unlinkSync(`${destination}/${paperName}`);
-
-        await this.prisma.paper.update({
-          where: { id },
-          data: {
-            [`${fieldname}Name`]: re[fieldname],
-          },
-        });
-      }
-    } catch (error) {
-      Logger.error(error.message || error, 'UploadUpdate');
-      return re;
-    }
-
-    return re;
   }
 
   deletePicture(imgPath: string) {

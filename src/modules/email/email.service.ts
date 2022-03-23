@@ -1,4 +1,3 @@
-import dayjs from '@/utils/dayjs';
 import { getNowTime } from '@/utils/time';
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import {
@@ -6,6 +5,7 @@ import {
   Inject,
   Injectable,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 
@@ -73,20 +73,24 @@ export class EmailService {
 
   /** 发送通知 */
   async sendNotice(email: string, title: string, notice = '') {
-    const { date, createdAt } = getNowTime();
-    const sendMailOptions: ISendMailOptions = {
-      to: email,
-      subject: title || '用户通知',
-      template: 'notice',
-      context: {
-        date, //日期
-        notice: notice || title, //通知
-      },
-    };
-    await this.mailerService.sendMail(sendMailOptions);
-    return {
-      email,
-      createdAt,
-    };
+    try {
+      const { date, createdAt } = getNowTime();
+      const sendMailOptions: ISendMailOptions = {
+        to: email,
+        subject: title || '用户通知',
+        template: 'notice',
+        context: {
+          date, //日期
+          notice: notice || title, //通知
+        },
+      };
+      await this.mailerService.sendMail(sendMailOptions);
+      return {
+        email,
+        createdAt,
+      };
+    } catch (error) {
+      Logger.log(error.message || error, 'EmailService');
+    }
   }
 }
