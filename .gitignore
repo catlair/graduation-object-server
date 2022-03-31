@@ -37,3 +37,5 @@ lerna-debug.log*
 
 *.local
 /uploads
+!/uploads/img/.gitkeep
+!/uploads/paper/.gitkeep

@@ -125,8 +125,9 @@ export class AppModule {}
 见 `src/modules/auth`  
 参考 `src/decorators/auth.decorator.ts` 中的装饰器进行鉴权。根据实际修改。  
 方法装饰器 `@Auth('admin')` 表示需要 admin 权限。  
-参数装饰器 `@UserReq() user` 获取已登录用户信息。  
-方法装饰器 `AuthUnlogin()` 表示可以不需要登录，但会尝试获取登录信息。
+参数装饰器 `@UserReq() user: User` 获取已登录用户信息（会访问数据库）。 
+同上 `@UserJwt() user: JwtDto` 获取 JWT 用户信息（不会访问数据库）。
+方法装饰器 `AuthUnlogin()` 表示可以不需要登录，但会尝试获取用户登录信息。
 
 ### 日志
 
