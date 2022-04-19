@@ -69,7 +69,6 @@ const NODE_ENV = process.env.NODE_ENV;
     NoticeModule,
   ],
   providers: [
-    
     {
       /** 节流器 */
       provide: APP_GUARD,

@@ -38,6 +38,8 @@ CREATE TABLE `paper_lifes` (
     `content` VARCHAR(191) NULL,
     `images` JSON NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `a_name` VARCHAR(50) NULL,
+    `b_name` VARCHAR(50) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
