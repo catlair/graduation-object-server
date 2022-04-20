@@ -24,7 +24,7 @@ import { CacheConfigService } from '@/config/cache.service';
         },
         preview: false,
         defaults: {
-          from: `"cat blog" <${configService.get('email.user', {
+          from: `"Paper Manger" <${configService.get('email.user', {
             infer: true,
           })}>`,
         },
