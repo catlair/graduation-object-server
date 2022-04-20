@@ -265,6 +265,8 @@ export class PaperService {
         roles: {
           array_contains: [Role.DIRECTOR],
         },
+        // 排除自己
+        id: { not: user.id },
       },
     });
     this.noticeService.create(users, {

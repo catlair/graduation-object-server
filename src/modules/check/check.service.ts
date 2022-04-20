@@ -37,6 +37,9 @@ export class CheckService {
   }
 
   private async notifyReupload(teacher: User, user: User, name: string) {
+    if (teacher.id === user.id) {
+      return;
+    }
     return this.noticeService.create([teacher], {
       userId: user.id,
       title: `${name} 审核不通过`,
@@ -54,6 +57,9 @@ export class CheckService {
           array_contains: Role.SECRETARY,
         },
         college: college,
+        id: {
+          not: user.id,
+        },
       },
     });
 
