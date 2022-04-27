@@ -1,0 +1,104 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id Int [pk]
+  email String [unique, not null]
+  name String [not null]
+  password String [not null]
+  college String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  roles Json [not null, default: '["TEACHER"]']
+  papers Paper [not null]
+  collegeEntity College [not null]
+}
+
+Table papers {
+  id String [pk]
+  course String [not null]
+  college String [not null]
+  teacherId Int [not null]
+  remark String
+  status PaperEnum [not null]
+  aName String [not null]
+  bName String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  lifes PaperLife [not null]
+  teacher User
+}
+
+Table paper_lifes {
+  id String [pk]
+  paperId String [not null]
+  userId Int [not null]
+  status PaperLifeEnum [not null]
+  content String
+  images Json [default: '[]']
+  createdAt DateTime [default: `now()`, not null]
+  aName String
+  bName String
+  paper Paper [not null]
+}
+
+Table manager_notices {
+  id String [pk]
+  title String [not null]
+  content String
+  userId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  userNotice UserNotice [not null]
+}
+
+Table user_notices {
+  id String [pk]
+  userId Int [not null]
+  noticeId String [not null]
+  read Boolean [not null, default: false]
+  readAt DateTime
+  managerNotice ManagerNotice [not null]
+}
+
+Table refresh_tokens {
+  token String [unique, not null]
+  userId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  os Json [not null, default: '{}']
+  device Json [not null, default: '{}']
+  browser Json [not null, default: '{}']
+
+  indexes {
+    (token, userId) [pk]
+  }
+}
+
+Table colleges {
+  id Int [pk]
+  name String [unique, not null]
+  User User [not null]
+}
+
+Enum PaperEnum {
+  WAITING
+  PASS
+  REJECT
+  PRINT
+}
+
+Enum PaperLifeEnum {
+  CREATE
+  UPDATE
+  PASS
+  REJECT
+  PRINT
+}
+
+Ref: User.college > College.name
+
+Ref: Paper.teacherId > User.id
+
+Ref: PaperLife.paperId > Paper.id
+
+Ref: UserNotice.noticeId > ManagerNotice.id

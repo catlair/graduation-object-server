@@ -3,7 +3,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CheckService } from './check.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 import { Auth, UserReq } from '@/decorators';
-import { Role } from '@/enums/role.enum';
+import { Roles } from '@/enums/role.enum';
 import { User } from '@prisma/client';
 
 @ApiTags('审核')
@@ -12,7 +12,7 @@ export class CheckController {
   constructor(private readonly checkService: CheckService) {}
 
   @Post()
-  @Auth(Role.DIRECTOR, Role.VICE_DIRECTOR)
+  @Auth(...Roles.DIRECTOR)
   @ApiOperation({ summary: '审核' })
   create(@Body() createCheckDto: CreateCheckDto, @UserReq() user: User) {
     return this.checkService.create(createCheckDto, user);

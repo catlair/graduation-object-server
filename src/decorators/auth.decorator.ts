@@ -7,8 +7,10 @@ import { AllowUnlogin } from './allow-unlogin.decorator';
 
 export const ROLES_KEY = 'roles';
 
-// 使用组合装饰器，简化鉴权过程
-
+/**
+ * 使用组合装饰器，简化鉴权过程
+ * @param roles 权限
+ */
 export function Auth(...roles: Role[]) {
   return applyDecorators(
     SetMetadata(ROLES_KEY, roles),
