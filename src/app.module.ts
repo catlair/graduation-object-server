@@ -7,10 +7,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from '~/auth/auth.module';
 import { resolve } from 'path';
-import { LoggerMiddleware } from './middleware/logger.middleware';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from 'nestjs-prisma';
-import { loggingMiddleware } from './middleware/prisma-logger.middleware';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { EmailModule } from './modules/email/email.module';
@@ -20,6 +18,7 @@ import { CheckModule } from './modules/check/check.module';
 import { PaperModule } from './modules/paper/paper.module';
 import { CollegeModule } from './modules/college/college.module';
 import { NoticeModule } from './modules/notice/notice.module';
+import { LoggerMiddleware, PrismaLoggerMiddleware } from './middleware';
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -42,7 +41,7 @@ const NODE_ENV = process.env.NODE_ENV;
     PrismaModule.forRoot({
       isGlobal: true,
       prismaServiceOptions: {
-        middlewares: [loggingMiddleware()], // configure your prisma middleware
+        middlewares: [PrismaLoggerMiddleware()], // configure your prisma middleware
       },
     }),
     ThrottlerModule.forRootAsync({

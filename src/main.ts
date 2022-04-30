@@ -2,6 +2,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as fs from 'fs';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
@@ -10,10 +11,18 @@ import { ResponseExceptionFilter } from './filters/res-exception.filter';
 import { WinstonModule } from 'nest-winston';
 import { PrismaClientExceptionFilter, PrismaService } from 'nestjs-prisma';
 import winstonOptions from './config/logging';
+import { resolve } from 'path';
+import type { HttpsOptions } from '@nestjs/common/interfaces/external/https-options.interface';
+
+const httpsOptions: HttpsOptions = {
+  key: fs.readFileSync(resolve(__dirname, './secrets/abels-key.pem')),
+  cert: fs.readFileSync(resolve(__dirname, './secrets/abels-cert.pem')),
+};
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger(winstonOptions),
+    httpsOptions,
   });
 
   // 跨域
@@ -58,6 +67,10 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(PORT);
-  Logger.log(`点击链接访问文档 http://localhost:${PORT}/api-docs`, 'Bootstrap');
+
+  Logger.log(
+    `点击链接访问文档 https://localhost:${PORT}/api-docs`,
+    'Bootstrap',
+  );
 }
 bootstrap();
