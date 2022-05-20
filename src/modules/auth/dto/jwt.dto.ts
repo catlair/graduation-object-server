@@ -1,5 +1,5 @@
 export interface JwtDto {
-  id: number;
+  id: string;
   roles: string[]; // 放这里面的方便使用，后面就不用再查数据库了
   /**
    * Issued at

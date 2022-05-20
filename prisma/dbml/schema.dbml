@@ -3,7 +3,7 @@
 //// ------------------------------------------------------
 
 Table users {
-  id Int [pk]
+  id String [pk]
   email String [unique, not null]
   name String [not null]
   password String [not null]
@@ -19,7 +19,7 @@ Table papers {
   id String [pk]
   course String [not null]
   college String [not null]
-  teacherId Int [not null]
+  teacherId String [not null]
   remark String
   status PaperEnum [not null]
   aName String [not null]
@@ -33,7 +33,7 @@ Table papers {
 Table paper_lifes {
   id String [pk]
   paperId String [not null]
-  userId Int [not null]
+  userId String [not null]
   status PaperLifeEnum [not null]
   content String
   images Json [default: '[]']
@@ -47,14 +47,14 @@ Table manager_notices {
   id String [pk]
   title String [not null]
   content String
-  userId Int [not null]
+  userId String [not null]
   createdAt DateTime [default: `now()`, not null]
   userNotice UserNotice [not null]
 }
 
 Table user_notices {
   id String [pk]
-  userId Int [not null]
+  userId String [not null]
   noticeId String [not null]
   read Boolean [not null, default: false]
   readAt DateTime
@@ -63,7 +63,7 @@ Table user_notices {
 
 Table refresh_tokens {
   token String [unique, not null]
-  userId Int [not null]
+  userId String [not null]
   createdAt DateTime [default: `now()`, not null]
   os Json [not null, default: '{}']
   device Json [not null, default: '{}']
@@ -81,17 +81,22 @@ Table colleges {
 }
 
 Enum PaperEnum {
-  WAITING
-  PASS
-  REJECT
+  PENDING
+  PASSED
+  REJECTED
+  REVIEW_PASSED
+  REVIEW_REJECTED
   PRINT
 }
 
 Enum PaperLifeEnum {
   CREATE
   UPDATE
-  PASS
-  REJECT
+  PENDING
+  PASSED
+  REJECTED
+  REVIEW_PASSED
+  REVIEW_REJECTED
   PRINT
 }
 

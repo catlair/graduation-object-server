@@ -2,9 +2,9 @@ import { IStrategyOptionsWithRequest, Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { isEmail, isNumberString } from 'class-validator';
+import { isEmail } from 'class-validator';
 import type { Request } from 'express';
-import { isNumber } from 'lodash';
+import { isString } from 'lodash';
 import { LoginEmailUserDto, LoginUserDto } from './dto/login-user.dto';
 import { validateErrThrow } from '@/utils';
 import { CaptchaService } from '../captche/captcha.service';
@@ -33,7 +33,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     validateErrThrow(LoginUserDto, { username, password });
 
     let keyName: 'email' | 'id';
-    let value: string | number = username;
+    const value: string = username;
     const ua = req.header('user-agent');
     const { code, key } = req.body;
 
@@ -44,11 +44,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
     if (isEmail(username)) {
       keyName = 'email';
-    } else if (isNumber(username)) {
+    } else if (isString(username)) {
       keyName = 'id';
-    } else if (isNumberString(username)) {
-      keyName = 'id';
-      value = Number(value);
     } else {
       throw new BadRequestException('用户名格式错误');
     }

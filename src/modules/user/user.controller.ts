@@ -8,7 +8,6 @@ import {
   ForbiddenException,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -40,7 +39,7 @@ export class UserController {
   @Delete(':id')
   @Auth(Role.ADMIN)
   @ApiOperation({ summary: '删除用户' })
-  async deleteUser(@Param('id', new ParseIntPipe()) id: number) {
+  async deleteUser(@Param('id') id: string) {
     return this.userService.deleteUser(id);
   }
 
@@ -101,7 +100,7 @@ export class UserController {
   @ApiOperation({ summary: '更新用户信息' })
   async updateUser(
     @UserReq() user: User,
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param('id') id: string,
     @Body() newUserData: UpdateUserDto,
   ) {
     if (!(user.roles as string[]).includes(Role.ADMIN) && user.id !== id) {

@@ -1,6 +1,5 @@
 import { Role } from '@/enums/role.enum';
 import {
-  IsNumber,
   IsNotEmpty,
   IsEmail,
   MinLength,
@@ -11,10 +10,11 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
+  @MinLength(6)
   @ApiProperty()
-  id: number;
+  id: string;
 
   @IsEmail()
   @IsNotEmpty()

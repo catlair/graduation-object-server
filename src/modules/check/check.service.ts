@@ -2,6 +2,7 @@ import { Role } from '@/enums/role.enum';
 import { Injectable } from '@nestjs/common';
 import { Paper, PaperEnum, User } from '@prisma/client';
 import { PrismaService } from 'nestjs-prisma';
+import { JwtDto } from '../auth/dto/jwt.dto';
 import { NoticeService } from '../notice/notice.service';
 import { CreateCheckDto } from './dto/create-check.dto';
 
@@ -12,7 +13,7 @@ export class CheckService {
     private readonly noticeService: NoticeService,
   ) {}
 
-  async create(createCheckDto: CreateCheckDto, user: User) {
+  async create(createCheckDto: CreateCheckDto, user: JwtDto) {
     const { status } = createCheckDto;
     const paper = await this.prisma.paper.update({
       where: { id: createCheckDto.paperId },
@@ -27,28 +28,44 @@ export class CheckService {
       },
     });
 
-    if (paper.status === 'REJECT') {
-      this.notifyReupload(paper.teacher, user, paper.course);
-    } else if (paper.status === 'PASS') {
-      this.notifyPass(user, paper);
+    switch (paper.status) {
+      case 'REJECTED':
+        this.notifyReupload(user, paper, `${paper.college} 初审未通过`);
+        break;
+      case 'PASSED':
+        this.notifyPass(user, paper, `${paper.college} 初审通过`);
+        break;
+      case 'REVIEW_PASSED':
+        this.notifyPass(user, paper, `${paper.college} 复审通过`);
+        break;
+      case 'REVIEW_REJECTED':
+        this.notifyReupload(user, paper, `${paper.college} 复审未通过`);
+        break;
+      default:
+        break;
     }
 
     return life;
   }
 
-  private async notifyReupload(teacher: User, user: User, name: string) {
+  private async notifyReupload(
+    user: JwtDto,
+    { teacher }: Paper & { teacher: User },
+    title: string,
+  ) {
     if (teacher.id === user.id) {
       return;
     }
     return this.noticeService.create([teacher], {
       userId: user.id,
-      title: `${name} 审核不通过`,
+      title,
     });
   }
 
   private async notifyPass(
-    user: User,
-    { teacher, college, course }: Paper & { teacher: User },
+    user: JwtDto,
+    { teacher, college }: Paper & { teacher: User },
+    title: string,
   ) {
     // 查询教秘
     const secretary = await this.prisma.user.findMany({
@@ -56,7 +73,7 @@ export class CheckService {
         roles: {
           array_contains: Role.SECRETARY,
         },
-        college: college,
+        college,
         id: {
           not: user.id,
         },
@@ -65,7 +82,7 @@ export class CheckService {
 
     return this.noticeService.create([...secretary, teacher], {
       userId: user.id,
-      title: `${course} 审核通过`,
+      title,
     });
   }
 }

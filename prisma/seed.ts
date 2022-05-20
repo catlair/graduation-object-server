@@ -44,7 +44,7 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
-      id: 10086112,
+      id: '10086112',
       college: '人工智能与大数据学院',
       name: '李华',
       email: 'catlair@qq.com',

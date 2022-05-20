@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, ValidateIf } from 'class-validator';
+import { IsString, ValidateIf } from 'class-validator';
 
 export class CreateNoticeDto {
   @ApiProperty()
-  @IsNumber()
-  userId: number;
+  @IsString()
+  userId: string;
 
   @ApiProperty()
   @IsString()

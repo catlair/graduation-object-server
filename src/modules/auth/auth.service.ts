@@ -31,7 +31,7 @@ export class AuthService {
   ) {}
 
   async loginValidate(
-    userVal: string | number,
+    userVal: string,
     userKey: 'email' | 'id',
     password: string,
     userAgent: string,
@@ -63,7 +63,7 @@ export class AuthService {
     };
   }
 
-  async validateUser(userId: number, selectPass = false): Promise<User> {
+  async validateUser(userId: string, selectPass = false): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -168,7 +168,7 @@ export class AuthService {
   }
 
   async setRefreshToken(
-    userId: number,
+    userId: string,
     refreshToken: string,
     userAgent: string | UA,
     token?: string,

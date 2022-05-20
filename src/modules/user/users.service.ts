@@ -54,7 +54,7 @@ export class UsersService {
     }
   }
 
-  deleteUser(userId: number) {
+  deleteUser(userId: string) {
     return this.prisma.user.delete({
       where: { id: userId },
     });
@@ -74,7 +74,7 @@ export class UsersService {
     );
   }
 
-  updateUser(userId: number, newUserData: UpdateUserDto) {
+  updateUser(userId: string, newUserData: UpdateUserDto) {
     return this.prisma.user.update({
       data: newUserData,
       where: {
@@ -85,7 +85,7 @@ export class UsersService {
   }
 
   /** 修改邮箱 */
-  async changeEmail(userId: number, { email, code, oldEmail }: ChangeEmailDto) {
+  async changeEmail(userId: string, { email, code, oldEmail }: ChangeEmailDto) {
     // 验证邮箱验证码
     await this.emailService.verifyEmail(oldEmail, code);
     // 邮箱是否已经被注册
@@ -111,7 +111,7 @@ export class UsersService {
   }
 
   /** 真正的修改邮箱 */
-  async updateEmail(key: string, userId: number) {
+  async updateEmail(key: string, userId: string) {
     // userId 应该手动输入，这样可以防止恶意修改，并且可以不要求用户登录
     const email = await this.cacheManager.get(key + userId);
     if (!email) {
@@ -133,7 +133,7 @@ export class UsersService {
 
   /** 修改密码（需要提供旧密码） */
   async changePassword(
-    userId: number,
+    userId: string,
     userPassword: string,
     changePassword: ChangePasswordDto,
   ) {
@@ -151,7 +151,7 @@ export class UsersService {
   }
 
   /** 重置密码 （需要邮箱） */
-  async resetPassword(userId: number, resetPassword: ResetPasswordDto) {
+  async resetPassword(userId: string, resetPassword: ResetPasswordDto) {
     // 验证邮箱验证码
     const { email, code } = resetPassword;
     await this.emailService.verifyEmail(email, code);
@@ -159,7 +159,7 @@ export class UsersService {
   }
 
   /** 更新密码 */
-  async updatePassword(userId: number, newPassword: string) {
+  async updatePassword(userId: string, newPassword: string) {
     const hashedPassword = await this.hashingService.get(newPassword);
     const user = await this.prisma.user.update({
       data: {
@@ -175,7 +175,7 @@ export class UsersService {
     return user;
   }
 
-  getNotices(userId: number) {
+  getNotices(userId: string) {
     return this.prisma.userNotice.findMany({
       where: { userId },
       include: {

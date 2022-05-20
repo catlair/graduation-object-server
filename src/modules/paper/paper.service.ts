@@ -58,7 +58,7 @@ export class PaperService {
     const paper = await this.prisma.paper.create({
       data: {
         ...createPaperDto,
-        status: PaperEnum.WAITING,
+        status: PaperEnum.PENDING,
         teacherId: user.id,
       },
     });
@@ -73,8 +73,12 @@ export class PaperService {
 
     await this.savaCreatePaper(paper.id, createPaperDto, paperLife.id);
 
-    // 找到学院的主任/副主任
-    this.notify(user, `${user.name}创建了试卷${paper.course}`);
+    // 找到学院的副主任
+    this.notify(
+      user,
+      createPaperDto.college,
+      `${user.name}创建了试卷【${paper.course}】`,
+    );
     return paper;
   }
 
@@ -117,11 +121,19 @@ export class PaperService {
     page: PageParams = { current: 1, pageSize: 10 },
   ) {
     const skip = (page.current - 1) * page.pageSize;
-    const query = {
+    const query: any = {
       where: {
         college: user.college,
       },
     };
+    // 如果是主任，只能看到初审通过的试卷
+    if ((user.roles as string[]).includes(Role.DIRECTOR)) {
+      query.where.status = PaperEnum.PASSED;
+    } else if ((user.roles as string[]).includes(Role.VICE_DIRECTOR)) {
+      query.where.status = PaperEnum.PENDING;
+    } else if ((user.roles as string[]).includes(Role.SECRETARY)) {
+      query.where.status = PaperEnum.REVIEW_PASSED;
+    }
     const papers = await this.prisma.paper.findMany({
       skip,
       take: page.pageSize,
@@ -197,19 +209,22 @@ export class PaperService {
       user.id,
     );
 
-    this.notify(user, `${user.name}更新了试卷${paper.course}`);
+    this.notify(
+      user,
+      paperNames.college,
+      `${user.name}更新了试卷${paper.course}`,
+    );
     return await this.prisma.paper.update({
       where: { id },
-      data: { status: PaperEnum.WAITING, ...paperNames },
+      data: { status: PaperEnum.PENDING, ...paperNames },
     });
   }
 
   private async updateCreatePaperLife(
     paperId: string,
     updatePaperDto: UpdatePaperDto,
-    userId: number,
+    userId: string,
   ) {
-    let paperNames = {};
     try {
       const paperLife = await this.prisma.paperLife.create({
         data: {
@@ -222,18 +237,29 @@ export class PaperService {
           status: PaperLifeEnum.UPDATE,
           content: updatePaperDto.content,
         },
+        select: {
+          id: true,
+          paper: {
+            select: {
+              college: true,
+            },
+          },
+        },
       });
       if (updatePaperDto.fields) {
-        paperNames = await this.saveUpdatePaper(
+        const paperNames = await this.saveUpdatePaper(
           paperId,
           paperLife.id,
           updatePaperDto.fields,
         );
+        return {
+          ...paperNames,
+          college: paperLife.paper.college,
+        };
       }
     } catch (error) {
       throw new InternalServerErrorException('更新试卷失败');
     }
-    return paperNames;
   }
 
   private async saveUpdatePaper(
@@ -257,13 +283,13 @@ export class PaperService {
     return paperNames;
   }
 
-  private async notify(user: User, title: string) {
+  private async notify(user: User, college: string, title: string) {
     const users = await this.prisma.user.findMany({
       where: {
-        college: user.college,
+        college,
         // 数组中是否包含指定的值
         roles: {
-          array_contains: [Role.DIRECTOR],
+          array_contains: [Role.VICE_DIRECTOR],
         },
         // 排除自己
         id: { not: user.id },

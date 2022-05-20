@@ -13,7 +13,7 @@ generator client {
 }
 
 model User {
-  id        Int      @id
+  id        String   @id
   email     String   @unique
   name      String   @db.VarChar(20)
   password  String   @db.VarChar(80)
@@ -37,7 +37,7 @@ model Paper {
   // 学院名称
   college   String    @db.VarChar(24)
   // 发布教师
-  teacherId Int       @map("teacher_id")
+  teacherId String    @map("teacher_id")
   // 备注
   remark    String?
   // 试卷状态
@@ -59,7 +59,7 @@ model PaperLife {
   id        String        @id @default(cuid())
   paperId   String        @map("paper_id")
   // 操作人
-  userId    Int           @map("user_id")
+  userId    String        @map("user_id")
   // 审核状态
   status    PaperLifeEnum
   content   String?
@@ -76,12 +76,16 @@ model PaperLife {
 }
 
 enum PaperEnum {
-  // 待审核
-  WAITING
-  // 审核通过
-  PASS
-  // 审核不通过
-  REJECT
+  // 待初审
+  PENDING
+  // 初审通过
+  PASSED
+  // 初审未通过
+  REJECTED
+  // 复审通过
+  REVIEW_PASSED
+  // 复审未通过
+  REVIEW_REJECTED
   // 试卷已打印
   PRINT
 }
@@ -91,10 +95,16 @@ enum PaperLifeEnum {
   CREATE
   // 重新上传
   UPDATE
-  // 审核通过
-  PASS
-  // 审核不通过
-  REJECT
+  // 待初审
+  PENDING
+  // 初审通过
+  PASSED
+  // 初审未通过
+  REJECTED
+  // 复审通过
+  REVIEW_PASSED
+  // 复审未通过
+  REVIEW_REJECTED
   // 试卷已打印
   PRINT
 }
@@ -105,7 +115,7 @@ model ManagerNotice {
   title     String   @db.VarChar(40)
   content   String?
   // 触发人
-  userId    Int      @map("user_id")
+  userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
 
   userNotice UserNotice[]
@@ -115,7 +125,7 @@ model ManagerNotice {
 // 用户接收通知
 model UserNotice {
   id       String    @id @default(cuid())
-  userId   Int       @map("user_id")
+  userId   String    @map("user_id")
   noticeId String    @map("notice_id")
   // 是否已读
   read     Boolean   @default(false)
@@ -129,7 +139,7 @@ model UserNotice {
 // 刷新token
 model RefreshToken {
   token     String   @unique @db.VarChar(32)
-  userId    Int      @map("user_id")
+  userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   os        Json     @default("{}")
   device    Json     @default("{}")

@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE `users` (
-    `id` INTEGER NOT NULL,
+    `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
     `password` VARCHAR(80) NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE `papers` (
     `id` VARCHAR(191) NOT NULL,
     `course` VARCHAR(20) NOT NULL,
     `college` VARCHAR(24) NOT NULL,
-    `teacher_id` INTEGER NOT NULL,
+    `teacher_id` VARCHAR(191) NOT NULL,
     `remark` VARCHAR(191) NULL,
-    `status` ENUM('WAITING', 'PASS', 'REJECT', 'PRINT') NOT NULL,
+    `status` ENUM('PENDING', 'PASSED', 'REJECTED', 'REVIEW_PASSED', 'REVIEW_REJECTED', 'PRINT') NOT NULL,
     `a_name` VARCHAR(50) NOT NULL,
     `b_name` VARCHAR(50) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -33,8 +33,8 @@ CREATE TABLE `papers` (
 CREATE TABLE `paper_lifes` (
     `id` VARCHAR(191) NOT NULL,
     `paper_id` VARCHAR(191) NOT NULL,
-    `user_id` INTEGER NOT NULL,
-    `status` ENUM('CREATE', 'UPDATE', 'PASS', 'REJECT', 'PRINT') NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
+    `status` ENUM('CREATE', 'UPDATE', 'PENDING', 'PASSED', 'REJECTED', 'REVIEW_PASSED', 'REVIEW_REJECTED', 'PRINT') NOT NULL,
     `content` VARCHAR(191) NULL,
     `images` JSON NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -49,7 +49,7 @@ CREATE TABLE `manager_notices` (
     `id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(40) NOT NULL,
     `content` VARCHAR(191) NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -58,7 +58,7 @@ CREATE TABLE `manager_notices` (
 -- CreateTable
 CREATE TABLE `user_notices` (
     `id` VARCHAR(191) NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `notice_id` VARCHAR(191) NOT NULL,
     `read` BOOLEAN NOT NULL DEFAULT false,
     `readAt` DATETIME(3) NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `user_notices` (
 -- CreateTable
 CREATE TABLE `refresh_tokens` (
     `token` VARCHAR(32) NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `user_id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `os` JSON NOT NULL,
     `device` JSON NOT NULL,

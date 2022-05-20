@@ -22,7 +22,8 @@
     "db:g": "dotenv-flow -- npx prisma generate",
     "db:seed": "dotenv-flow -- ts-node prisma/seed.ts",
     "db:demo": "dotenv-flow -- ts-node prisma/demo.ts",
-    "db:studio": "dotenv-flow -- npx prisma studio"
+    "db:studio": "dotenv-flow -- npx prisma studio",
+    "db:init": "npm run db:migrate && npm run db:seed && npm run db:demo"
   },
   "dependencies": {
     "@devoxa/prisma-relay-cursor-connection": "^2.2.1",
